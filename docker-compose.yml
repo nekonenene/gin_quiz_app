@@ -1,0 +1,17 @@
+version: "3"
+services:
+  web:
+    build:
+      context: .
+    ports:
+      - "8013:8080"
+    volumes:
+      - .:/go/src/github.com/nekonenene/quiz_app
+    env_file: .env
+    depends_on:
+      - db
+    restart: on-failure
+  db:
+    image: mysql:8.0
+    env_file: .env
+    restart: on-failure
