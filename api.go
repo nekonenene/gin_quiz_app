@@ -1,6 +1,14 @@
 package main
 
-import "github.com/gin-gonic/gin"
+import (
+	"strconv"
+
+	"github.com/gin-gonic/gin"
+)
+
+const (
+	portNum = 8013
+)
 
 func main() {
 	r := gin.Default()
@@ -9,5 +17,5 @@ func main() {
 			"message": "pong",
 		})
 	})
-	r.Run() // listen and serve on 0.0.0.0:8080
+	r.Run(":" + strconv.Itoa(portNum))
 }

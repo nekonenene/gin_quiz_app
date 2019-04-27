@@ -4,4 +4,4 @@ WORKDIR /go/src/github.com/nekonenene/quiz_app
 
 COPY . .
 
-CMD ["go", "run", "example.go"]
+CMD ["go", "run", "api.go"]

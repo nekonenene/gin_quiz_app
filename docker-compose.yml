@@ -1,10 +1,11 @@
 version: "3"
 services:
-  web:
+  api:
     build:
       context: .
+    container_name: quiz_app_api
     ports:
-      - "8013:8080"
+      - "8013:8013"
     volumes:
       - .:/go/src/github.com/nekonenene/quiz_app
     env_file: .env
@@ -13,5 +14,6 @@ services:
     restart: on-failure
   db:
     image: mysql:8.0
+    container_name: quiz_app_db
     env_file: .env
     restart: on-failure
