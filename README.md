@@ -2,6 +2,15 @@
 
 Under development...（出来上がらないかも……むずかしい……）
 
+## How to develop
+
+Install [Go](https://golang.org) and init.
+
+```sh
+export GO111MODULE=on
+make init
+```
+
 ## Using...
 
 * [Gin](https://github.com/gin-gonic/gin)

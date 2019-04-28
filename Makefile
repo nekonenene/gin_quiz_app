@@ -1,6 +1,6 @@
 .PHONY: init
 init:
-	dep ensure
+	go mod vendor
 	cp default.env .env
 
 .PHONY: db_migrate
