@@ -1,7 +1,6 @@
 package user
 
 import (
-	"fmt"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -20,8 +19,6 @@ func listUser(c *gin.Context) {
 		errorResponse(c, err.Error())
 		return
 	}
-
-	fmt.Printf("%v", users)
 
 	c.JSON(200, gin.H{
 		"users": users,
