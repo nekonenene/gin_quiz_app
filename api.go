@@ -16,9 +16,12 @@ func main() {
 	db := common.InitDB()
 	defer db.Close()
 
-	router := gin.Default()
-	api := router.Group("/api")
+	user.AutoMigrate()
 
+	router := gin.Default()
+	router.Use(gin.Recovery())
+
+	api := router.Group("/api")
 	user.UserRouter(api.Group("/user"))
 
 	api.GET("/ping", func(c *gin.Context) {
