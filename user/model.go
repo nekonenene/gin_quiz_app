@@ -8,7 +8,7 @@ import (
 
 type User struct {
 	ID        uint64    `gorm:"primary_key"                json:"id"`
-	Name      string    `gorm:"not null"                   json:"name"`
+	Name      string    `gorm:"not null"                   json:"name"        binding:"required,max=255"`
 	CreatedAt time.Time `gorm:"type:datetime(3); not null" json:"created_at"`
 	UpdatedAt time.Time `gorm:"type:datetime(3); not null" json:"-"`
 }

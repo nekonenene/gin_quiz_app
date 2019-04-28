@@ -4,6 +4,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/nekonenene/gin_quiz_app/common"
 )
 
 func UserRouter(router *gin.RouterGroup) {
@@ -15,46 +16,37 @@ func UserRouter(router *gin.RouterGroup) {
 func listUser(c *gin.Context) {
 	users, err := FindAll()
 	if err != nil {
-		errorResponse(c, err.Error())
+		common.ErrorResponse(c, err.Error())
 		return
 	}
 
-	c.JSON(200, gin.H{
-		"users": users,
-	})
+	common.OkResponse(c, "users", users)
 }
 
 func showUserByID(c *gin.Context) {
 	id := c.Param("id")
 	idInt, err := strconv.Atoi(id)
 	if err != nil {
-		errorResponse(c, "id must be integer")
+		common.ErrorResponse(c, "id must be integer")
 		return
 	}
 
 	user, err := FindByID(uint(idInt))
 	if err != nil {
-		errorResponse(c, err.Error())
+		common.ErrorResponse(c, err.Error())
 		return
 	}
 
-	c.JSON(200, gin.H{
-		"user": user,
-	})
+	common.OkResponse(c, "user", user)
 }
 
 func createUser(c *gin.Context) {
 	var user User
-	c.BindJSON(&user)
+	if err := c.ShouldBindJSON(&user); err != nil {
+		common.BadRequestErrorResponse(c, err.Error())
+		return
+	}
 	Create(&user)
 
-	c.JSON(200, gin.H{
-		"user": user,
-	})
-}
-
-func errorResponse(c *gin.Context, message string) {
-	c.JSON(500, gin.H{
-		"error": message,
-	})
+	common.OkResponse(c, "user", user)
 }
