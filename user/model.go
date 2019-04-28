@@ -3,7 +3,7 @@ package user
 import (
 	"time"
 
-	"github.com/nekonenene/quiz_app/common"
+	"github.com/nekonenene/gin_quiz_app/common"
 )
 
 type User struct {

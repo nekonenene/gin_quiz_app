@@ -1,6 +1,6 @@
 FROM golang:1.12.4
 
-WORKDIR /go/src/github.com/nekonenene/quiz_app
+WORKDIR /go/src/github.com/nekonenene/gin_quiz_app
 
 RUN curl -fLo /usr/local/bin/air \
   https://raw.githubusercontent.com/cosmtrek/air/master/bin/linux/air && \

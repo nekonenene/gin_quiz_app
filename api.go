@@ -4,8 +4,8 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/nekonenene/quiz_app/common"
-	"github.com/nekonenene/quiz_app/user"
+	"github.com/nekonenene/gin_quiz_app/common"
+	"github.com/nekonenene/gin_quiz_app/user"
 )
 
 const (

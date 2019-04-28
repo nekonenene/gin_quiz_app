@@ -7,7 +7,7 @@ services:
     ports:
       - "8013:8013"
     volumes:
-      - .:/go/src/github.com/nekonenene/quiz_app
+      - .:/go/src/github.com/nekonenene/gin_quiz_app
     env_file: .env
     depends_on:
       - db
