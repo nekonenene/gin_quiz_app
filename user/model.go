@@ -7,8 +7,8 @@ import (
 )
 
 type User struct {
-	ID        uint64 `gorm:"primary_key"`
-	Name      string
+	ID        uint64    `gorm:"primary_key"`
+	Name      string    `gorm:"not null"`
 	CreatedAt time.Time `gorm:"type:datetime(3); not null"`
 	UpdatedAt time.Time `gorm:"type:datetime(3); not null"`
 }
