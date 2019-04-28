@@ -1,7 +1,7 @@
 package user
 
 import (
-	"net/http"
+	"fmt"
 	"strconv"
 
 	"github.com/gin-gonic/gin"
@@ -15,8 +15,16 @@ func UserRouter(router *gin.RouterGroup) {
 }
 
 func listUser(c *gin.Context) {
-	c.JSON(http.StatusOK, gin.H{
-		"message": "User List!",
+	users, err := FindAll()
+	if err != nil {
+		errorResponse(c, err.Error())
+		return
+	}
+
+	fmt.Printf("%v", users)
+
+	c.JSON(200, gin.H{
+		"users": users,
 	})
 }
 
@@ -24,22 +32,18 @@ func showUserByID(c *gin.Context) {
 	id := c.Param("id")
 	idInt, err := strconv.Atoi(id)
 	if err != nil {
-		c.JSON(500, gin.H{
-			"error": "id must be integer",
-		})
+		errorResponse(c, "id must be integer")
 		return
 	}
 
 	user, err := FindByID(uint(idInt))
 	if err != nil {
-		c.JSON(500, gin.H{
-			"error": err.Error(),
-		})
+		errorResponse(c, err.Error())
 		return
 	}
 
 	c.JSON(200, gin.H{
-		"message": "User name: " + user.Name,
+		"user": user,
 	})
 }
 
@@ -49,6 +53,12 @@ func createUser(c *gin.Context) {
 	Create(&user)
 
 	c.JSON(200, gin.H{
-		"message": "Created user: " + user.Name,
+		"user": user,
+	})
+}
+
+func errorResponse(c *gin.Context, message string) {
+	c.JSON(500, gin.H{
+		"error": message,
 	})
 }

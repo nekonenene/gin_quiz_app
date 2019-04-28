@@ -7,16 +7,24 @@ import (
 )
 
 type User struct {
-	ID        uint64    `gorm:"primary_key"`
-	Name      string    `gorm:"not null"`
-	CreatedAt time.Time `gorm:"type:datetime(3); not null"`
-	UpdatedAt time.Time `gorm:"type:datetime(3); not null"`
+	ID        uint64    `gorm:"primary_key"                json:"id"`
+	Name      string    `gorm:"not null"                   json:"name"`
+	CreatedAt time.Time `gorm:"type:datetime(3); not null" json:"created_at"`
+	UpdatedAt time.Time `gorm:"type:datetime(3); not null" json:"-"`
 }
 
 func AutoMigrate() {
 	db := common.GetDB()
 
 	db.AutoMigrate(&User{})
+}
+
+func FindAll() ([]User, error) {
+	db := common.GetDB()
+	var users []User
+	err := db.Find(&users).Error
+
+	return users, err
 }
 
 func FindByID(id uint) (User, error) {
@@ -27,8 +35,9 @@ func FindByID(id uint) (User, error) {
 	return user, err
 }
 
-func Create(user *User) {
+func Create(user *User) (User, error) {
 	db := common.GetDB()
-	db.NewRecord(&user)
-	db.Create(user)
+	err := db.Create(user).Error
+
+	return *user, err
 }
