@@ -27,7 +27,16 @@ func UserRouter(router *gin.RouterGroup) {
 		}
 
 		c.JSON(200, gin.H{
-			"message": "User Name: " + user.Name,
+			"message": "User name: " + user.Name,
+		})
+	})
+
+	router.POST("/create", func(c *gin.Context) {
+		var user User
+		c.BindJSON(&user)
+
+		c.JSON(200, gin.H{
+			"message": "Created user: " + user.Name,
 		})
 	})
 }
