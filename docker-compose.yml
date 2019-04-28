@@ -13,7 +13,7 @@ services:
       - db
     restart: on-failure
   db:
-    image: mysql:8.0
+    image: mysql:5.7
     container_name: quiz_app_db
     env_file: .env
     restart: on-failure
