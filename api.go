@@ -3,6 +3,7 @@ package main
 import (
 	"strconv"
 
+	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/nekonenene/gin_quiz_app/common"
 	"github.com/nekonenene/gin_quiz_app/oauth"
@@ -20,7 +21,10 @@ func main() {
 	user.AutoMigrate()
 
 	router := gin.Default()
+	store := sessions.NewCookieStore([]byte("secret"))
+	router.Use(sessions.Sessions("gin_quiz_app_session", store))
 	router.Use(gin.Recovery())
+	router.LoadHTMLGlob("assets/html/*")
 
 	oauth.InitGoogleOAuth()
 	oauth.GoogleRouter(router.Group("/oauth/google"))
@@ -28,10 +32,8 @@ func main() {
 	api := router.Group("/api")
 	user.UserRouter(api.Group("/user"))
 
-	api.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "pong",
-		})
+	router.GET("/", func(c *gin.Context) {
+		c.HTML(200, "index.html", gin.H{})
 	})
 
 	router.Run(":" + strconv.Itoa(portNum))

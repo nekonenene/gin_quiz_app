@@ -2,12 +2,13 @@ package oauth
 
 import (
 	"context"
+	"crypto/rand"
+	"encoding/base64"
 	"fmt"
 	"io/ioutil"
-	"log"
-	"net/http"
 	"os"
 
+	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/nekonenene/gin_quiz_app/common"
 	"golang.org/x/oauth2"
@@ -23,7 +24,7 @@ func InitGoogleOAuth() {
 	conf = &oauth2.Config{
 		ClientID:     os.Getenv("GOOGLE_CLIENT_ID"),
 		ClientSecret: os.Getenv("GOOGLE_CLIENT_SECRET"),
-		RedirectURL:  "http://127.0.0.1:8013/oauth/google/callback",
+		RedirectURL:  "http://localhost:8013/oauth/google/callback",
 		// Scopes: https://developers.google.com/identity/protocols/googlescopes#google_sign-in
 		Scopes: []string{
 			"email",
@@ -39,22 +40,28 @@ func GoogleRouter(router *gin.RouterGroup) {
 }
 
 func login(c *gin.Context) {
-	// state = randToken()
-	// session := sessions.Default(c)
-	// session.Set("state", state)
-	// session.Save()
+	state = randToken()
+	session := sessions.Default(c)
+	session.Set("state", state)
+	session.Save()
 
-	fmt.Printf("%v", getLoginURL(state))
-	common.OkResponse(c, "url", getLoginURL(state))
+	// common.OkResponse(c, "url", getLoginURL(state))
+	c.Redirect(302, getLoginURL(state))
 }
 
-// func randToken() string {
-// 	b := make([]byte, 32)
-// 	rand.Read(b)
-// 	return base64.StdEncoding.EncodeToString(b)
-// }
+func randToken() string {
+	b := make([]byte, 32)
+	rand.Read(b)
+	return base64.StdEncoding.EncodeToString(b)
+}
 
 func callbackHandler(c *gin.Context) {
+	session := sessions.Default(c)
+	if session.Get("state") != c.Query("state") {
+		common.BadRequestErrorResponse(c, "invalid session state")
+		return
+	}
+
 	context := context.Background()
 	token, err := conf.Exchange(context, c.Query("code"))
 	if err != nil {
@@ -62,21 +69,21 @@ func callbackHandler(c *gin.Context) {
 		return
 	}
 	if !token.Valid() {
-		common.BadRequestErrorResponse(c, "Invalid token")
+		common.BadRequestErrorResponse(c, "invalid token")
 		return
 	}
 
 	client := conf.Client(context, token)
-	email, err := client.Get("https://www.googleapis.com/oauth2/v3/userinfo")
+	response, err := client.Get("https://www.googleapis.com/oauth2/v3/userinfo")
 	if err != nil {
 		common.BadRequestErrorResponse(c, err.Error())
 		return
 	}
-	defer email.Body.Close()
+	defer response.Body.Close()
 
-	data, _ := ioutil.ReadAll(email.Body)
-	log.Println("Email body: ", string(data))
-	c.Status(http.StatusOK)
+	data, _ := ioutil.ReadAll(response.Body)
+	fmt.Printf("userinfo: %v", string(data))
+	common.OkResponse(c, "response", string(data))
 }
 
 func getLoginURL(state string) string {
