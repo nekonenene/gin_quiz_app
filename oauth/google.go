@@ -58,14 +58,18 @@ func callbackHandler(c *gin.Context) {
 	context := context.Background()
 	token, err := conf.Exchange(context, c.Query("code"))
 	if err != nil {
-		c.AbortWithError(http.StatusBadRequest, err)
+		common.BadRequestErrorResponse(c, err.Error())
+		return
+	}
+	if !token.Valid() {
+		common.BadRequestErrorResponse(c, "Invalid token")
 		return
 	}
 
 	client := conf.Client(context, token)
 	email, err := client.Get("https://www.googleapis.com/oauth2/v3/userinfo")
 	if err != nil {
-		c.AbortWithError(http.StatusBadRequest, err)
+		common.BadRequestErrorResponse(c, err.Error())
 		return
 	}
 	defer email.Body.Close()
