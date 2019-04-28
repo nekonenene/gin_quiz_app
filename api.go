@@ -4,6 +4,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/nekonenene/quiz_app/common"
 	"github.com/nekonenene/quiz_app/user"
 )
 
@@ -12,8 +13,10 @@ const (
 )
 
 func main() {
-	router := gin.Default()
+	db := common.InitDB()
+	defer db.Close()
 
+	router := gin.Default()
 	api := router.Group("/api")
 
 	user.UserRouter(api.Group("/user"))
