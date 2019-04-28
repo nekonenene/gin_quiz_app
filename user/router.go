@@ -6,7 +6,6 @@ import (
 	"github.com/gin-gonic/gin"
 )
 
-// UserRouter : router
 func UserRouter(router *gin.RouterGroup) {
 	router.GET("/list", listUser)
 	router.GET("/show/:id", showUserByID)
