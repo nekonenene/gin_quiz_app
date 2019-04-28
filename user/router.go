@@ -14,7 +14,7 @@ func UserRouter(router *gin.RouterGroup) {
 		})
 	})
 
-	router.POST("/show/:id", func(c *gin.Context) {
+	router.GET("/show/:id", func(c *gin.Context) {
 		id := c.Param("id")
 		c.JSON(http.StatusOK, gin.H{
 			"message": "User ID: " + id,
