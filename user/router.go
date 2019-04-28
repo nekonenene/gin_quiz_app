@@ -22,7 +22,14 @@ func listUser(c *gin.Context) {
 
 func showUserByID(c *gin.Context) {
 	id := c.Param("id")
-	idInt, _ := strconv.Atoi(id)
+	idInt, err := strconv.Atoi(id)
+	if err != nil {
+		c.JSON(500, gin.H{
+			"error": "id must be integer",
+		})
+		return
+	}
+
 	user, err := FindByID(uint(idInt))
 	if err != nil {
 		c.JSON(500, gin.H{
