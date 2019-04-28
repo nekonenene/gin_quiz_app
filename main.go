@@ -25,6 +25,7 @@ func main() {
 	router.Use(sessions.Sessions("gin_quiz_app_session", store))
 	router.Use(gin.Recovery())
 	router.LoadHTMLGlob("assets/html/*")
+	router.Static("/img", "assets/img")
 
 	oauth.InitGoogleOAuth()
 	oauth.GoogleRouter(router.Group("/oauth/google"))
