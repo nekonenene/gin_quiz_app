@@ -36,7 +36,7 @@ func InitDB() *gorm.DB {
 	db.DB().SetMaxIdleConns(10)
 	db = db.Set("gorm:table_options", "ENGINE=InnoDB CHARSET=utf8mb4 COLLATE=utf8mb4_bin")
 	db.SingularTable(true)
-	//db.LogMode(true)
+	db.LogMode(true)
 
 	DB = db
 	return DB

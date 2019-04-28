@@ -39,6 +39,7 @@ func showUserByID(c *gin.Context) {
 func createUser(c *gin.Context) {
 	var user User
 	c.BindJSON(&user)
+	Create(user)
 
 	c.JSON(200, gin.H{
 		"message": "Created user: " + user.Name,

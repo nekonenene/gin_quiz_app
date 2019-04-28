@@ -26,3 +26,9 @@ func FindByID(id uint) (User, error) {
 
 	return user, err
 }
+
+func Create(user User) {
+	db := common.GetDB()
+	db.NewRecord(user)
+	db.Create(&user)
+}
