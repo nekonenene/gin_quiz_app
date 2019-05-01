@@ -1,9 +1,6 @@
 package session
 
 import (
-	crand "crypto/rand"
-	"encoding/base64"
-	"io"
 	"time"
 
 	"github.com/nekonenene/gin_quiz_app/common"
@@ -45,30 +42,7 @@ func Create(session *Session) (Session, error) {
 	return *session, err
 }
 
-func CreateWithData(data string) (Session, error) {
-	sessionID, err := generateSessionId()
-	if err != nil {
-		return Session{}, err
-	}
-
-	session := Session{
-		SessionID: sessionID,
-		Data:      data,
-	}
-	return Create(&session)
-}
-
 func DeleteBySessionID(sessionID string) error {
 	db := common.GetDB()
 	return db.Where("session_id = ?", sessionID).Delete(Session{}).Error
-}
-
-func generateSessionId() (string, error) {
-	b := make([]byte, 32)
-	if _, err := io.ReadFull(crand.Reader, b); err != nil {
-		return "", err
-	}
-
-	str := base64.URLEncoding.EncodeToString(b) // length: 44
-	return str, nil
 }
