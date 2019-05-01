@@ -1,10 +1,7 @@
 package session
 
 import (
-	crand "crypto/rand"
-	"encoding/base64"
 	"errors"
-	"io"
 	"time"
 
 	"github.com/gin-gonic/gin"
@@ -12,16 +9,17 @@ import (
 )
 
 const (
-	cookieName    = "session_id"
-	oneDaySec     = 86400 // 60 * 60 * 24
-	sessionMaxAge = oneDaySec * 7
-	cookiePath    = "/"
+	cookieName      = "session_id"
+	oneDaySec       = 86400 // 60 * 60 * 24
+	sessionMaxAge   = oneDaySec * 7
+	cookiePath      = "/"
+	sessionIDLength = 64
 )
 
 // 新しい session ID を作成し、cookie および DB に保存
 // これを呼び出す前に DestroySession をおこなっておくことが望ましい
 func StartNewSession(c *gin.Context, data string) (Session, error) {
-	sessionID := generateSessionID()
+	sessionID := common.RandomString(sessionIDLength)
 	if sessionID == "" {
 		return Session{}, errors.New("failed to generate session ID")
 	}
@@ -88,15 +86,4 @@ func storeSessionIDInCookie(c *gin.Context, sessionID string) {
 // cookie の session ID を削除
 func deleteSessionIDInCookie(c *gin.Context) {
 	common.SetCookie(c, cookieName, "", -1)
-}
-
-// session ID をランダム文字列で生成する
-func generateSessionID() string {
-	b := make([]byte, 64)
-	if _, err := io.ReadFull(crand.Reader, b); err != nil {
-		return ""
-	}
-
-	str := base64.URLEncoding.EncodeToString(b) // length: 88
-	return str
 }
