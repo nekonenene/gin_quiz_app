@@ -19,6 +19,8 @@ const (
 	cookiePath    = "/"
 )
 
+// 新しい session ID を作成し、cookie および DB に保存
+// これを呼び出す前に DestroySession をおこなっておくことが望ましい
 func StartNewSession(c *gin.Context, data string) (Session, error) {
 	sessionID := generateSessionID()
 	if sessionID == "" {
@@ -34,10 +36,13 @@ func StartNewSession(c *gin.Context, data string) (Session, error) {
 	return Create(&session)
 }
 
+// 現在の session ID を cookie から呼び出す
 func CurrentSessionID(c *gin.Context) (string, error) {
 	return c.Cookie(cookieName)
 }
 
+// 現在のセッションデータを呼び出す
+// DB から呼び出した値が不正な場合は session の削除処理をおこなう
 func CurrentSessionData(c *gin.Context) (string, error) {
 	sessionID, err := CurrentSessionID(c)
 	if err != nil {
@@ -58,11 +63,13 @@ func CurrentSessionData(c *gin.Context) (string, error) {
 	return GetDataBySessionID(sessionID)
 }
 
+// Session モデルの CreatedAt を見て、期限切れのセッションか判定
 func isSessionExpired(session Session) bool {
 	expiredAt := session.CreatedAt.Add(sessionMaxAge)
 	return time.Now().After(expiredAt)
 }
 
+// session ID を cookie および DB から削除
 func DestroySession(c *gin.Context) error {
 	sessionID, err := CurrentSessionID(c)
 	if err != nil {
@@ -74,6 +81,8 @@ func DestroySession(c *gin.Context) error {
 	return DeleteBySessionID(sessionID)
 }
 
+// cookie に session ID を保存。maxAge に負の値が渡されたときは削除がおこなわれる
+// Ref: https://golang.org/pkg/net/http/#Cookie
 func storeSessionIDInCookie(c *gin.Context, sessionID string, maxAge int) {
 	http.SetCookie(c.Writer, &http.Cookie{
 		Name:     cookieName,
@@ -86,6 +95,7 @@ func storeSessionIDInCookie(c *gin.Context, sessionID string, maxAge int) {
 	})
 }
 
+// session ID をランダム文字列で生成する
 func generateSessionID() string {
 	b := make([]byte, 64)
 	if _, err := io.ReadFull(crand.Reader, b); err != nil {
