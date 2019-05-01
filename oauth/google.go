@@ -4,8 +4,9 @@ import (
 	"context"
 	"crypto/rand"
 	"encoding/base64"
-	"fmt"
+	"encoding/json"
 	"io/ioutil"
+	"log"
 	"os"
 
 	"github.com/gin-gonic/gin"
@@ -22,6 +23,13 @@ const (
 var (
 	conf *oauth2.Config
 )
+
+type OAuthResponse struct {
+	OpenID        string `json:"sub"`
+	Email         string `json:"email"`
+	EmailVerified bool   `json:"email_verified"`
+	PictureURL    string `json:"picture"`
+}
 
 func InitGoogleOAuth() {
 	conf = &oauth2.Config{
@@ -46,7 +54,7 @@ func login(c *gin.Context) {
 	state := randToken()
 	common.SetCookie(c, stateCookieName, state, stateMaxAge)
 
-	c.Redirect(302, getLoginURL(state))
+	c.Redirect(302, conf.AuthCodeURL(state))
 }
 
 func randToken() string {
@@ -82,11 +90,10 @@ func callbackHandler(c *gin.Context) {
 	}
 	defer response.Body.Close()
 
-	data, _ := ioutil.ReadAll(response.Body)
-	fmt.Printf("userinfo: %v", string(data))
-	common.OkResponse(c, "response", string(data))
-}
-
-func getLoginURL(state string) string {
-	return conf.AuthCodeURL(state)
+	body, _ := ioutil.ReadAll(response.Body)
+	var res OAuthResponse
+	json.Unmarshal(body, &res)
+	// log.Printf("userinfo: %v\n\n", string(body))
+	log.Printf("userinfo: %v\n\n", res)
+	common.OkResponse(c, "response", string(body))
 }
