@@ -8,16 +8,19 @@ import (
 	"io/ioutil"
 	"os"
 
-	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/nekonenene/gin_quiz_app/common"
 	"golang.org/x/oauth2"
 	"golang.org/x/oauth2/google"
 )
 
+const (
+	stateCookieName = "google_oauth_state"
+	stateMaxAge     = 600
+)
+
 var (
-	conf  *oauth2.Config
-	state string
+	conf *oauth2.Config
 )
 
 func InitGoogleOAuth() {
@@ -40,12 +43,9 @@ func GoogleRouter(router *gin.RouterGroup) {
 }
 
 func login(c *gin.Context) {
-	state = randToken()
-	session := sessions.Default(c)
-	session.Set("state", state)
-	session.Save()
+	state := randToken()
+	common.SetCookie(c, stateCookieName, state, stateMaxAge)
 
-	// common.OkResponse(c, "url", getLoginURL(state))
 	c.Redirect(302, getLoginURL(state))
 }
 
@@ -56,8 +56,9 @@ func randToken() string {
 }
 
 func callbackHandler(c *gin.Context) {
-	session := sessions.Default(c)
-	if session.Get("state") != c.Query("state") {
+	state, _ := common.GetCookie(c, stateCookieName)
+	common.SetCookie(c, stateCookieName, "", -1) // Delete Cookie
+	if state != c.Query("state") {
 		common.BadRequestErrorResponse(c, "invalid session state")
 		return
 	}

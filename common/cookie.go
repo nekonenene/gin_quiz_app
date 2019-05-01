@@ -21,7 +21,7 @@ func SetCookie(c *gin.Context, name string, value string, maxAge int) {
 		MaxAge:   maxAge,
 		Secure:   c.Request.URL.Scheme == "https",
 		HttpOnly: true,
-		SameSite: http.SameSiteStrictMode,
+		SameSite: http.SameSiteDefaultMode,
 	})
 }
 

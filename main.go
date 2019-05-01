@@ -4,8 +4,6 @@ import (
 	"log"
 	"strconv"
 
-	"github.com/gin-contrib/sessions"
-	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 	"github.com/nekonenene/gin_quiz_app/common"
 	"github.com/nekonenene/gin_quiz_app/oauth"
@@ -31,8 +29,6 @@ func main() {
 	session.AutoMigrate()
 
 	router := gin.Default()
-	store := cookie.NewStore([]byte("secret"))
-	router.Use(sessions.Sessions("gin_quiz_app_session", store))
 	router.Use(gin.Recovery())
 	router.LoadHTMLGlob("assets/html/*")
 	router.Static("/img", "assets/img")
@@ -47,6 +43,9 @@ func main() {
 		// TODO: remove this debug code
 		data, err := session.CurrentSessionData(c)
 		log.Printf("session data: %v, err: %v\n", data, err)
+		if data == "" {
+			session.StartNewSession(c, "hogehoge")
+		}
 
 		c.HTML(200, "index.html", gin.H{})
 	})
