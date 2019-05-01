@@ -1,12 +1,14 @@
 package main
 
 import (
+	"fmt"
 	"strconv"
 
 	"github.com/gin-gonic/contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"github.com/nekonenene/gin_quiz_app/common"
 	"github.com/nekonenene/gin_quiz_app/oauth"
+	"github.com/nekonenene/gin_quiz_app/session"
 	"github.com/nekonenene/gin_quiz_app/user"
 )
 
@@ -15,10 +17,16 @@ const (
 )
 
 func main() {
+	str, _ := common.Encrypt([]byte("Bun Bun Hello, YouTube!"), "password")
+	fmt.Println(str)
+	str, _ = common.Decrypt(str, "password")
+	fmt.Println(string(str))
+
 	db := common.InitDB()
 	defer db.Close()
 
 	user.AutoMigrate()
+	session.AutoMigrate()
 
 	router := gin.Default()
 	store := sessions.NewCookieStore([]byte("secret"))
