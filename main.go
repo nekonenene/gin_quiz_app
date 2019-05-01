@@ -6,7 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/nekonenene/gin_quiz_app/common"
-	"github.com/nekonenene/gin_quiz_app/oauth"
+	gauth "github.com/nekonenene/gin_quiz_app/oauth/google"
 	"github.com/nekonenene/gin_quiz_app/session"
 	"github.com/nekonenene/gin_quiz_app/user"
 )
@@ -33,8 +33,8 @@ func main() {
 	router.LoadHTMLGlob("assets/html/*")
 	router.Static("/img", "assets/img")
 
-	oauth.InitGoogleOAuth()
-	oauth.GoogleRouter(router.Group("/oauth/google"))
+	gauth.InitConf()
+	gauth.GoogleOAuthRouter(router.Group("/oauth/google"))
 
 	api := router.Group("/api")
 	user.UserRouter(api.Group("/user"))
