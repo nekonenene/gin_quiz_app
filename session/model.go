@@ -58,6 +58,11 @@ func CreateWithData(data string) (Session, error) {
 	return Create(&session)
 }
 
+func DeleteBySessionID(sessionID string) error {
+	db := common.GetDB()
+	return db.Where("session_id = ?", sessionID).Delete(Session{}).Error
+}
+
 func generateSessionId() (string, error) {
 	b := make([]byte, 32)
 	if _, err := io.ReadFull(crand.Reader, b); err != nil {

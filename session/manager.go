@@ -24,7 +24,7 @@ func StartNewSession(c *gin.Context, data string) (Session, error) {
 		return Session{}, errors.New("failed to generate session ID")
 	}
 
-	storeSessionIDInCookie(c, sessionID)
+	storeSessionIDInCookie(c, sessionID, cookieMaxAge)
 
 	session := Session{
 		SessionID: sessionID,
@@ -46,11 +46,23 @@ func CurrentSessionData(c *gin.Context) (string, error) {
 	return GetDataBySessionID(sessionID)
 }
 
-func storeSessionIDInCookie(c *gin.Context, sessionID string) {
+func DestroySession(c *gin.Context) error {
+	sessionID, err := CurrentSessionID(c)
+	if err != nil {
+		return err
+	}
+
+	storeSessionIDInCookie(c, sessionID, -1)
+
+	return DeleteBySessionID(sessionID)
+}
+
+func storeSessionIDInCookie(c *gin.Context, sessionID string, maxAge int) {
 	http.SetCookie(c.Writer, &http.Cookie{
 		Name:     cookieName,
 		Value:    url.QueryEscape(sessionID),
-		MaxAge:   cookieMaxAge,
+		Path:     cookiePath,
+		MaxAge:   maxAge,
 		Secure:   c.Request.URL.Scheme == "https",
 		HttpOnly: true,
 		SameSite: http.SameSiteStrictMode,
