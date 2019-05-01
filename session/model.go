@@ -26,15 +26,6 @@ func FindBySessionID(sessionID string) (Session, error) {
 	return session, err
 }
 
-func GetDataBySessionID(sessionID string) (string, error) {
-	session, err := FindBySessionID(sessionID)
-	if err != nil {
-		return "", err
-	}
-
-	return session.Data, nil
-}
-
 func Create(session *Session) (Session, error) {
 	db := common.GetDB()
 	err := db.Create(session).Error

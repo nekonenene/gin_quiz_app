@@ -60,7 +60,7 @@ func CurrentSessionData(c *gin.Context) (string, error) {
 		return "", errors.New("session has expired")
 	}
 
-	return GetDataBySessionID(sessionID)
+	return session.Data, nil
 }
 
 // Session モデルの CreatedAt を見て、期限切れのセッションか判定
