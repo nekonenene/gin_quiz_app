@@ -7,15 +7,16 @@ import (
 	"io"
 	"net/http"
 	"net/url"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
 
 const (
-	cookieName   = "session_id"
-	oneDaySec    = 86400 // 60 * 60 * 24
-	cookieMaxAge = oneDaySec * 7
-	cookiePath   = "/"
+	cookieName    = "session_id"
+	oneDaySec     = 86400 // 60 * 60 * 24
+	sessionMaxAge = oneDaySec * 7
+	cookiePath    = "/"
 )
 
 func StartNewSession(c *gin.Context, data string) (Session, error) {
@@ -24,7 +25,7 @@ func StartNewSession(c *gin.Context, data string) (Session, error) {
 		return Session{}, errors.New("failed to generate session ID")
 	}
 
-	storeSessionIDInCookie(c, sessionID, cookieMaxAge)
+	storeSessionIDInCookie(c, sessionID, sessionMaxAge)
 
 	session := Session{
 		SessionID: sessionID,
@@ -43,7 +44,23 @@ func CurrentSessionData(c *gin.Context) (string, error) {
 		return "", err
 	}
 
+	session, err := FindBySessionID(sessionID)
+	if err != nil {
+		return "", err
+	}
+
+	// セッションの改竄をしていなければここは通らないはず
+	if isSessionExpired(session) {
+		DestroySession(c)
+		return "", errors.New("session has expired")
+	}
+
 	return GetDataBySessionID(sessionID)
+}
+
+func isSessionExpired(session Session) bool {
+	expiredAt := session.CreatedAt.Add(sessionMaxAge)
+	return time.Now().After(expiredAt)
 }
 
 func DestroySession(c *gin.Context) error {
