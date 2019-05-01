@@ -1,7 +1,9 @@
-vendor
 .env
-tmp
-playground
+*.log
+
+playground/
+tmp/
+vendor/
 
 ### https://raw.github.com/github/gitignore/65bb94ddc106488eb227d147e3be956a6662857c/Go.gitignore
 
