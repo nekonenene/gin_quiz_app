@@ -1,14 +1,15 @@
 package common
 
 import (
-	crand "crypto/rand"
+	"crypto/rand"
 	"encoding/base64"
 	"io"
 )
 
+// length byte のデータを Base64 Encode した後の左から length 文字を得る
 func RandomString(length int) string {
 	b := make([]byte, length)
-	if _, err := io.ReadFull(crand.Reader, b); err != nil {
+	if _, err := io.ReadFull(rand.Reader, b); err != nil {
 		return ""
 	}
 
