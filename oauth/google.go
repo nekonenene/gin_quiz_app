@@ -56,7 +56,7 @@ func randToken() string {
 }
 
 func callbackHandler(c *gin.Context) {
-	state, _ := common.GetCookie(c, stateCookieName)
+	state, _ := common.GetCookieValue(c, stateCookieName)
 	common.SetCookie(c, stateCookieName, "", -1) // Delete Cookie
 	if state != c.Query("state") {
 		common.BadRequestErrorResponse(c, "invalid session state")
