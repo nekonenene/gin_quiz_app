@@ -64,7 +64,7 @@ func CurrentSessionData(c *gin.Context) (string, error) {
 
 // Session モデルの CreatedAt を見て、期限切れのセッションか判定
 func isSessionExpired(session Session) bool {
-	expiredAt := session.CreatedAt.Add(sessionMaxAge)
+	expiredAt := session.CreatedAt.Add(time.Second * sessionMaxAge)
 	return time.Now().After(expiredAt)
 }
 
