@@ -1,7 +1,7 @@
 package main
 
 import (
-	"fmt"
+	"log"
 	"strconv"
 
 	"github.com/gin-contrib/sessions"
@@ -20,9 +20,9 @@ const (
 func main() {
 	// TODO: remove this debug code
 	str, _ := common.Encrypt([]byte("Bun Bun Hello, YouTube!"), "password")
-	fmt.Println(str)
+	log.Println(str)
 	str, _ = common.Decrypt(str, "password")
-	fmt.Println(string(str))
+	log.Println(string(str))
 
 	db := common.InitDB()
 	defer db.Close()
@@ -46,7 +46,7 @@ func main() {
 	router.GET("/", func(c *gin.Context) {
 		// TODO: remove this debug code
 		data, err := session.CurrentSessionData(c)
-		fmt.Printf("session data: %v, err: %v", data, err)
+		log.Printf("session data: %v, err: %v\n", data, err)
 
 		c.HTML(200, "index.html", gin.H{})
 	})
