@@ -5,11 +5,10 @@ import (
 	"encoding/base64"
 	"errors"
 	"io"
-	"net/http"
-	"net/url"
 	"time"
 
 	"github.com/gin-gonic/gin"
+	"github.com/nekonenene/gin_quiz_app/common"
 )
 
 const (
@@ -27,7 +26,7 @@ func StartNewSession(c *gin.Context, data string) (Session, error) {
 		return Session{}, errors.New("failed to generate session ID")
 	}
 
-	storeSessionIDInCookie(c, sessionID, sessionMaxAge)
+	storeSessionIDInCookie(c, sessionID)
 
 	session := Session{
 		SessionID: sessionID,
@@ -76,23 +75,19 @@ func DestroySession(c *gin.Context) error {
 		return err
 	}
 
-	storeSessionIDInCookie(c, sessionID, -1)
+	deleteSessionIDInCookie(c)
 
 	return DeleteBySessionID(sessionID)
 }
 
-// cookie に session ID を保存。maxAge に負の値が渡されたときは削除がおこなわれる
-// Ref: https://golang.org/pkg/net/http/#Cookie
-func storeSessionIDInCookie(c *gin.Context, sessionID string, maxAge int) {
-	http.SetCookie(c.Writer, &http.Cookie{
-		Name:     cookieName,
-		Value:    url.QueryEscape(sessionID),
-		Path:     cookiePath,
-		MaxAge:   maxAge,
-		Secure:   c.Request.URL.Scheme == "https",
-		HttpOnly: true,
-		SameSite: http.SameSiteStrictMode,
-	})
+// cookie に session ID を保存
+func storeSessionIDInCookie(c *gin.Context, sessionID string) {
+	common.SetCookie(c, cookieName, sessionID, sessionMaxAge)
+}
+
+// cookie の session ID を削除
+func deleteSessionIDInCookie(c *gin.Context) {
+	common.SetCookie(c, cookieName, "", -1)
 }
 
 // session ID をランダム文字列で生成する
