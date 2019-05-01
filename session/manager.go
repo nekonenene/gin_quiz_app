@@ -70,11 +70,11 @@ func storeSessionIDInCookie(c *gin.Context, sessionID string, maxAge int) {
 }
 
 func generateSessionID() string {
-	b := make([]byte, 32)
+	b := make([]byte, 64)
 	if _, err := io.ReadFull(crand.Reader, b); err != nil {
 		return ""
 	}
 
-	str := base64.URLEncoding.EncodeToString(b) // length: 44
+	str := base64.URLEncoding.EncodeToString(b) // length: 88
 	return str
 }
