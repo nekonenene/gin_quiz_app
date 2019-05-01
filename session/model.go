@@ -21,12 +21,21 @@ func AutoMigrate() {
 	db.AutoMigrate(&Session{})
 }
 
-func FindByID(session_id string) (Session, error) {
+func FindBySessionID(sessionID string) (Session, error) {
 	db := common.GetDB()
 	var session Session
-	err := db.Where("session_id = ?", session_id).First(&session).Error
+	err := db.Where("session_id = ?", sessionID).First(&session).Error
 
 	return session, err
+}
+
+func GetDataBySessionID(sessionID string) (string, error) {
+	session, err := FindBySessionID(sessionID)
+	if err != nil {
+		return "", err
+	}
+
+	return session.Data, nil
 }
 
 func Create(session *Session) (Session, error) {

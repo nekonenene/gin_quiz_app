@@ -18,6 +18,7 @@ const (
 )
 
 func main() {
+	// TODO: remove this debug code
 	str, _ := common.Encrypt([]byte("Bun Bun Hello, YouTube!"), "password")
 	fmt.Println(str)
 	str, _ = common.Decrypt(str, "password")
@@ -43,6 +44,10 @@ func main() {
 	user.UserRouter(api.Group("/user"))
 
 	router.GET("/", func(c *gin.Context) {
+		// TODO: remove this debug code
+		data, err := session.CurrentSessionData(c)
+		fmt.Printf("session data: %v, err: %v", data, err)
+
 		c.HTML(200, "index.html", gin.H{})
 	})
 
