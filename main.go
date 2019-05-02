@@ -16,18 +16,19 @@ const (
 )
 
 func main() {
-	// TODO: remove this debug code
-	str, _ := common.Encrypt([]byte("Bun Bun Hello, YouTube!"), "password")
-	log.Println(str)
-	bytes, _ := common.Decrypt(str, "password")
-	log.Println(string(bytes))
-
 	db := common.InitDB()
 	defer db.Close()
 
+	migrateAll()
+	setupRouter()
+}
+
+func migrateAll() {
 	user.AutoMigrate()
 	session.AutoMigrate()
+}
 
+func setupRouter() {
 	router := gin.Default()
 	router.Use(gin.Recovery())
 	router.LoadHTMLGlob("assets/html/*")
