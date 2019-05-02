@@ -19,11 +19,11 @@ const (
 )
 
 func GoogleOAuthRouter(router *gin.RouterGroup) {
-	router.GET("/login", login)
+	router.GET("/signin", signin)
 	router.GET("/callback", callbackHandler)
 }
 
-func login(c *gin.Context) {
+func signin(c *gin.Context) {
 	state := common.RandomString(stateLength)
 	common.SetCookie(c, stateCookieName, state, stateMaxAge)
 
