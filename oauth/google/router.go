@@ -7,7 +7,9 @@ import (
 	"log"
 
 	"github.com/gin-gonic/gin"
+	"github.com/jinzhu/gorm"
 	"github.com/nekonenene/gin_quiz_app/common"
+	"github.com/nekonenene/gin_quiz_app/user"
 )
 
 const (
@@ -58,7 +60,20 @@ func callbackHandler(c *gin.Context) {
 	body, _ := ioutil.ReadAll(response.Body)
 	var res OAuthResponse
 	json.Unmarshal(body, &res)
-	// log.Printf("userinfo: %v\n\n", string(body))
-	log.Printf("userinfo: %v\n\n", res)
+
+	// TODO: エラーの表示についてはあとで書く
+	var u user.User
+	u, err = user.FindByOpenID(provider, res.ProviderID)
+	if gorm.IsRecordNotFoundError(err) {
+		u, err = res.CreateUser()
+		if err != nil {
+			log.Println("ユーザーの作成に失敗しました")
+		}
+	} else if err != nil {
+		log.Println("不明なエラーが発生しました")
+	}
+
+	log.Printf("user: %v\n", u)
+	log.Printf("userinfo: %v\n", res)
 	common.OkResponse(c, "response", string(body))
 }

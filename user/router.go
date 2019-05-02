@@ -46,7 +46,7 @@ func createUser(c *gin.Context) {
 		common.BadRequestErrorResponse(c, err.Error())
 		return
 	}
-	Create(&user)
+	user.Create()
 
 	common.OkResponse(c, "user", user)
 }
