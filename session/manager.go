@@ -17,19 +17,22 @@ const (
 )
 
 // 新しい session ID を作成し、cookie および DB に保存。既存の session は削除する
-func StartNewSession(c *gin.Context, data string) (Session, error) {
-	DestroySession(c)
-
+func StartNewSession(c *gin.Context, data *Data) (Session, error) {
 	sessionID := common.RandomString(sessionIDLength)
 	if sessionID == "" {
 		return Session{}, errors.New("failed to generate session ID")
 	}
+	encodedData, err := data.Encode()
+	if err != nil {
+		return Session{}, err
+	}
 
+	DestroySession(c)
 	storeSessionIDInCookie(c, sessionID)
 
 	session := Session{
-		SessionID: sessionID,
-		Data:      data,
+		SessionID:   sessionID,
+		EncodedData: encodedData,
 	}
 	return Create(&session)
 }
@@ -58,9 +61,10 @@ func CurrentSessionData(c *gin.Context) (string, error) {
 		return "", errors.New("session has expired")
 	}
 
-	return session.Data, nil
+	return session.EncodedData, nil
 }
 
+// session からユーザーIDを取得する
 func CurrentUserID(c *gin.Context) (uint64, error) {
 	encoded, err := CurrentSessionData(c)
 	if err != nil {
@@ -73,6 +77,12 @@ func CurrentUserID(c *gin.Context) (uint64, error) {
 	}
 
 	return data.UserID, nil
+}
+
+// ログイン中のユーザーか
+func IsSignin(c *gin.Context) bool {
+	userID, err := CurrentUserID(c)
+	return err == nil && userID > 0
 }
 
 // Session モデルの CreatedAt を見て、期限切れのセッションか判定

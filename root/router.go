@@ -1,6 +1,8 @@
 package root
 
 import (
+	"strconv"
+
 	"github.com/gin-gonic/gin"
 	"github.com/nekonenene/gin_quiz_app/session"
 )
@@ -12,8 +14,7 @@ func RootRouter(router *gin.RouterGroup) {
 }
 
 func root(c *gin.Context) {
-	userID, err := session.CurrentUserID(c)
-	if err == nil && userID > 0 {
+	if session.IsSignin(c) {
 		c.Redirect(302, "/home")
 	}
 
@@ -21,7 +22,14 @@ func root(c *gin.Context) {
 }
 
 func home(c *gin.Context) {
-	c.HTML(200, "home.html", gin.H{})
+	userID, err := session.CurrentUserID(c)
+	if err != nil {
+		c.Redirect(302, "/")
+	}
+
+	c.HTML(200, "home.html", gin.H{
+		"userID": strconv.FormatUint(userID, 10),
+	})
 }
 
 func signout(c *gin.Context) {

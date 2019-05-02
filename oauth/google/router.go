@@ -79,12 +79,7 @@ func callbackHandler(c *gin.Context) {
 
 	// User ID をセッションに保存
 	data := session.Data{UserID: u.ID}
-	encoded, err := data.Encode()
-	if err != nil {
-		common.ErrorResponse(c, err.Error())
-		return
-	}
-	session.StartNewSession(c, encoded)
+	session.StartNewSession(c, &data)
 
 	c.Redirect(302, "/")
 }
