@@ -60,6 +60,20 @@ func CurrentSessionData(c *gin.Context) (string, error) {
 	return session.Data, nil
 }
 
+func CurrentUserID(c *gin.Context) (uint64, error) {
+	encoded, err := CurrentSessionData(c)
+	if err != nil {
+		return 0, err
+	}
+
+	data, err := Decode(encoded)
+	if err != nil {
+		return 0, err
+	}
+
+	return data.UserID, nil
+}
+
 // Session モデルの CreatedAt を見て、期限切れのセッションか判定
 func isSessionExpired(session Session) bool {
 	expiredAt := session.CreatedAt.Add(time.Second * sessionMaxAge)

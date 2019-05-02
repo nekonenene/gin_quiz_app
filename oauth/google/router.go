@@ -4,11 +4,11 @@ import (
 	"context"
 	"encoding/json"
 	"io/ioutil"
-	"log"
 
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 	"github.com/nekonenene/gin_quiz_app/common"
+	"github.com/nekonenene/gin_quiz_app/session"
 	"github.com/nekonenene/gin_quiz_app/user"
 )
 
@@ -31,6 +31,7 @@ func login(c *gin.Context) {
 }
 
 func callbackHandler(c *gin.Context) {
+	// 遷移異常がないか確認
 	state, _ := common.GetCookieValue(c, stateCookieName)
 	common.SetCookie(c, stateCookieName, "", -1) // Delete Cookie
 	if state != c.Query("state") {
@@ -49,6 +50,7 @@ func callbackHandler(c *gin.Context) {
 		return
 	}
 
+	// Google の OAuth 2.0 API から情報を取得
 	client := conf.Client(context, token)
 	response, err := client.Get("https://www.googleapis.com/oauth2/v3/userinfo")
 	if err != nil {
@@ -61,19 +63,29 @@ func callbackHandler(c *gin.Context) {
 	var res OAuthResponse
 	json.Unmarshal(body, &res)
 
-	// TODO: エラーの表示についてはあとで書く
+	// Google OAuth の結果から user を検索。なければ作成
 	var u user.User
 	u, err = user.FindByOpenID(provider, res.ProviderID)
 	if gorm.IsRecordNotFoundError(err) {
 		u, err = res.CreateUser()
 		if err != nil {
-			log.Println("ユーザーの作成に失敗しました")
+			common.ErrorResponse(c, err.Error())
+			return
 		}
 	} else if err != nil {
-		log.Println("不明なエラーが発生しました")
+		common.ErrorResponse(c, err.Error())
+		return
 	}
 
-	log.Printf("user: %v\n", u)
-	log.Printf("userinfo: %v\n", res)
-	common.OkResponse(c, "response", string(body))
+	// User ID をセッションに保存
+	data := session.Data{UserID: u.ID}
+	encoded, err := data.Encode()
+	if err != nil {
+		common.ErrorResponse(c, err.Error())
+		return
+	}
+	session.DestroySession(c)
+	session.StartNewSession(c, encoded)
+
+	c.Redirect(302, "/")
 }

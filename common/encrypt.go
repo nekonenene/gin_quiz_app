@@ -7,7 +7,6 @@ import (
 	"crypto/rand"
 	"encoding/base64"
 	"encoding/hex"
-	"errors"
 	"io"
 	"os"
 )
@@ -19,10 +18,10 @@ func CreateHash(key string) string {
 	return hex.EncodeToString(hasher.Sum(nil))
 }
 
-func Encrypt(text []byte, key string) ([]byte, error) {
+func Encrypt(text []byte, key string) (string, error) {
 	block, err := aes.NewCipher([]byte(CreateHash(key))) // cipher block の作成
 	if err != nil {
-		return nil, err
+		return "", err
 	}
 
 	b := base64.StdEncoding.EncodeToString(text)     // Base64 Encoding をおこない文字列 b とする
@@ -30,21 +29,24 @@ func Encrypt(text []byte, key string) ([]byte, error) {
 
 	iv := ciphertext[:aes.BlockSize] // 最初の16文字を iv とする
 	if _, err := io.ReadFull(rand.Reader, iv); err != nil {
-		return nil, err
+		return "", err
 	}
 
 	cfb := cipher.NewCFBEncrypter(block, iv)                // CFB = Ciphertext feedback
 	cfb.XORKeyStream(ciphertext[aes.BlockSize:], []byte(b)) // 各バイトをXORする
-	return ciphertext, nil
+
+	return base64.StdEncoding.EncodeToString(ciphertext), nil
 }
 
-func Decrypt(text []byte, key string) ([]byte, error) {
-	block, err := aes.NewCipher([]byte(CreateHash(key)))
+func Decrypt(ciphertext string, key string) ([]byte, error) {
+	text, err := base64.StdEncoding.DecodeString(ciphertext)
 	if err != nil {
 		return nil, err
 	}
-	if len(text) < aes.BlockSize {
-		return nil, errors.New("ciphertext too short")
+
+	block, err := aes.NewCipher([]byte(CreateHash(key)))
+	if err != nil {
+		return nil, err
 	}
 
 	iv := text[:aes.BlockSize]

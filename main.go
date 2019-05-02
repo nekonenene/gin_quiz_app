@@ -19,8 +19,8 @@ func main() {
 	// TODO: remove this debug code
 	str, _ := common.Encrypt([]byte("Bun Bun Hello, YouTube!"), "password")
 	log.Println(str)
-	str, _ = common.Decrypt(str, "password")
-	log.Println(string(str))
+	bytes, _ := common.Decrypt(str, "password")
+	log.Println(string(bytes))
 
 	db := common.InitDB()
 	defer db.Close()
@@ -41,11 +41,8 @@ func main() {
 
 	router.GET("/", func(c *gin.Context) {
 		// TODO: remove this debug code
-		data, err := session.CurrentSessionData(c)
-		log.Printf("session data: %v, err: %v\n", data, err)
-		if data == "" {
-			session.StartNewSession(c, "hogehoge")
-		}
+		userID, _ := session.CurrentUserID(c)
+		log.Printf("user ID: %v\n", userID)
 
 		c.HTML(200, "index.html", gin.H{})
 	})
