@@ -84,7 +84,6 @@ func callbackHandler(c *gin.Context) {
 		common.ErrorResponse(c, err.Error())
 		return
 	}
-	session.DestroySession(c)
 	session.StartNewSession(c, encoded)
 
 	c.Redirect(302, "/")

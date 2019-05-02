@@ -16,9 +16,10 @@ const (
 	sessionIDLength = 64
 )
 
-// 新しい session ID を作成し、cookie および DB に保存
-// これを呼び出す前に DestroySession をおこなっておくことが望ましい
+// 新しい session ID を作成し、cookie および DB に保存。既存の session は削除する
 func StartNewSession(c *gin.Context, data string) (Session, error) {
+	DestroySession(c)
+
 	sessionID := common.RandomString(sessionIDLength)
 	if sessionID == "" {
 		return Session{}, errors.New("failed to generate session ID")
