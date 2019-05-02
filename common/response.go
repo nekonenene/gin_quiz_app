@@ -25,3 +25,10 @@ func BadRequestErrorResponse(c *gin.Context, message string) {
 		"error": message,
 	})
 }
+
+// 403 error
+func ForbiddenErrorResponse(c *gin.Context) {
+	c.JSON(http.StatusForbidden, gin.H{
+		"error": "Forbidden error",
+	})
+}

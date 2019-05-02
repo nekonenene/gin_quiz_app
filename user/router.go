@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/nekonenene/gin_quiz_app/common"
+	"github.com/nekonenene/gin_quiz_app/session"
 )
 
 func UserRouter(router *gin.RouterGroup) {
@@ -14,6 +15,19 @@ func UserRouter(router *gin.RouterGroup) {
 }
 
 func listUser(c *gin.Context) {
+	sessionID := c.Query("session")
+	sess, err := session.FindBySessionID(sessionID)
+	if err != nil {
+		common.ForbiddenErrorResponse(c)
+		return
+	}
+
+	data, _ := sess.Decode()
+	if !(data.UserID > 0) {
+		common.ForbiddenErrorResponse(c)
+		return
+	}
+
 	users, err := FindAll()
 	if err != nil {
 		common.ErrorResponse(c, err.Error())

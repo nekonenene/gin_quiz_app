@@ -37,3 +37,7 @@ func DeleteBySessionID(sessionID string) error {
 	db := common.GetDB()
 	return db.Where("session_id = ?", sessionID).Delete(Session{}).Error
 }
+
+func (sess *Session) Decode() (Data, error) {
+	return Decode(sess.EncodedData)
+}
