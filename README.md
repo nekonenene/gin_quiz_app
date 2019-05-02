@@ -11,6 +11,15 @@ export GO111MODULE=on
 make init
 ```
 
+Start web server and database.
+
+```sh
+docker-compose up
+```
+
+Then, Go => http://localhost:8013
+
+
 ## Using...
 
 * [Gin](https://github.com/gin-gonic/gin)
