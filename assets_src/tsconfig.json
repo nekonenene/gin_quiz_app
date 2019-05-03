@@ -1,0 +1,14 @@
+{
+  "compilerOptions": {
+    "sourceMap": true,
+    "target": "es2018",
+    "module": "es2015",
+    "rootDir": ".",
+    "outDir": "./dist/",
+    "strict": true, /* すべての厳密な型チェックオプションを有効にします */
+    "noUnusedLocals": true, /* 未使用のローカルのエラーを報告します */
+    "noUnusedParameters": true, /* 未使用のパラメータのエラーを報告します */
+    "noFallthroughCasesInSwitch": true, /* switchステートメントのfallthrough caseのエラーを報告します */
+    "jsx": "react"
+  }
+}

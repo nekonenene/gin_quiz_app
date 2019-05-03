@@ -33,6 +33,7 @@ func setupRouter() {
 	router.Use(gin.Recovery())
 	router.LoadHTMLGlob("assets/html/*")
 	router.Static("/img", "assets/img")
+	router.Static("/js", "assets/js")
 
 	root.RootRouter(router.Group("/"))
 
