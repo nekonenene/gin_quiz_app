@@ -21,4 +21,4 @@ mysql:
 
 .PHONY: test
 test:
-	go test ./...
+	docker-compose exec api /bin/bash -c 'go test ./...'
