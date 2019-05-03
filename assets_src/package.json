@@ -8,7 +8,7 @@
     "build:prod": "webpack --config webpack.config.prod.js",
     "watch": "webpack --colors --config webpack.config.dev.js --watch",
     "watch:prod": "webpack --colors --config webpack.config.prod.js --watch",
-    "lint": "eslint ."
+    "lint": "eslint -c .eslintrc.yml ./**/*.tsx"
   },
   "author": "nekonenene",
   "license": "MIT",
@@ -19,10 +19,11 @@
   "devDependencies": {
     "@types/react": "^16.8.15",
     "@types/react-dom": "^16.8.4",
+    "@typescript-eslint/eslint-plugin": "^1.7.0",
+    "@typescript-eslint/parser": "^1.7.0",
     "eslint": "^5.16.0",
-    "eslint-config-airbnb": "^17.1.0",
+    "eslint-config-airbnb-base": "^13.1.0",
     "eslint-plugin-import": "^2.17.2",
-    "eslint-plugin-jsx-a11y": "^6.2.1",
     "eslint-plugin-react": "^7.13.0",
     "ts-loader": "^5.4.5",
     "typescript": "^3.4.5",

@@ -3,5 +3,9 @@ import * as ReactDOM from 'react-dom';
 import Footer from './Footer';
 
 ReactDOM.render(
-  <Footer content="hello world" />, document.getElementById('app')
+  <Footer
+    author="ハトネコエ"
+    link="https://twitter.com/nekonenene"
+  />,
+  document.getElementById('app'),
 );

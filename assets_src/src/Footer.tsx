@@ -1,19 +1,20 @@
 import * as React from 'react';
 
 export interface Props {
-  content: string;
+  author: string;
+  link: string;
 }
 
-export default class MyComponent extends React.Component<Props, {}> {
-  render() {
-    return(
+export default class Footer extends React.Component<Props, {}> {
+  public render() {
+    return (
       <div className="container">
         <div className="section">
           <div className="row center">
-            <p className="light">Powered by <a href="https://materializecss.com">Materialize.css</a></p>
+            <p className="light">Created by <a href={this.props.link}>{this.props.author}</a></p>
           </div>
         </div>
       </div>
-    )
+    );
   }
 }
