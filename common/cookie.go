@@ -30,5 +30,11 @@ func SetCookie(c *gin.Context, name string, value string, maxAge int) http.Cooki
 
 // Ref: https://github.com/gin-gonic/gin/blob/893c6ca/context.go#L760-L767
 func GetCookieValue(c *gin.Context, name string) (string, error) {
-	return c.Cookie(name)
+	cookie, err := c.Request.Cookie(name)
+	if err != nil {
+		return "", err
+	}
+
+	val, _ := url.QueryUnescape(cookie.Value)
+	return val, nil
 }
