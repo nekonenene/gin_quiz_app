@@ -3,6 +3,18 @@ init:
 	go mod vendor
 	cp default.env .env
 
+.PHONY: run
+run:
+	docker-compose up -d
+
+.PHONY: stop
+stop:
+	docker-compose stop
+
+.PHONY: log
+log:
+	docker-compose logs --tail=5 -f
+
 .PHONY: db_migrate
 db_migrate:
 	docker-compose exec api /bin/bash -c 'mysqldef -u $$MYSQL_USER -p $$MYSQL_PASSWORD -h db --file=schema.sql $$MYSQL_DATABASE'
