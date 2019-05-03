@@ -18,3 +18,7 @@ db_export:
 .PHONY: mysql
 mysql:
 	docker-compose exec db /bin/bash -c 'mysql -u $$MYSQL_USER --password=$$MYSQL_PASSWORD $$MYSQL_DATABASE'
+
+.PHONY: test
+test:
+	go test ./...
