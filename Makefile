@@ -33,4 +33,5 @@ mysql:
 
 .PHONY: test
 test:
+	docker-compose exec db /bin/bash -c 'mysql -u root --password=$$MYSQL_ROOT_PASSWORD -e "CREATE DATABASE IF NOT EXISTS $$MYSQL_TEST_DATABASE; GRANT ALL ON $${MYSQL_TEST_DATABASE}.* TO $$MYSQL_USER;"'
 	docker-compose exec api /bin/bash -c 'go test ./...'

@@ -42,6 +42,15 @@ func InitDB() *gorm.DB {
 	return DB
 }
 
+func InitTestDB() *gorm.DB {
+	dbName := os.Getenv("MYSQL_DATABASE")
+	testDBName := os.Getenv("MYSQL_TEST_DATABASE")
+	os.Setenv("MYSQL_DATABASE", testDBName)
+	defer os.Setenv("MYSQL_DATABASE", dbName)
+
+	return InitDB()
+}
+
 func GetDB() *gorm.DB {
 	return DB
 }
