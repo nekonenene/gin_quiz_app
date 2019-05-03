@@ -1,14 +1,28 @@
 {
   "compilerOptions": {
-    "sourceMap": true,
-    "target": "es2018",
-    "module": "es2015",
-    "rootDir": ".",
-    "outDir": "./dist/",
+    "target": "es5",
+    "module": "esnext",
+    "moduleResolution": "node",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
+    ],
     "strict": true, /* すべての厳密な型チェックオプションを有効にします */
     "noUnusedLocals": true, /* 未使用のローカルのエラーを報告します */
     "noUnusedParameters": true, /* 未使用のパラメータのエラーを報告します */
     "noFallthroughCasesInSwitch": true, /* switchステートメントのfallthrough caseのエラーを報告します */
+    "allowJs": true,
+    "skipLibCheck": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "outDir": "./dist/",
     "jsx": "react"
-  }
+  },
+  "include": [
+    "src"
+  ]
 }
