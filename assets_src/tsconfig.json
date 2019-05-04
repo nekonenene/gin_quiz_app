@@ -18,7 +18,6 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "resolveJsonModule": true,
-    "isolatedModules": true,
     "outDir": "./dist/",
     "jsx": "react"
   },

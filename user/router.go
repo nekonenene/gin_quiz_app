@@ -9,9 +9,26 @@ import (
 )
 
 func UserRouter(router *gin.RouterGroup) {
+	router.GET("/current", currentUser)
 	router.GET("/list", listUser)
 	router.GET("/show/:id", showUserByID)
 	router.POST("/create", createUser)
+}
+
+func currentUser(c *gin.Context) {
+	uid, err := session.CurrentUserID(c)
+	if err != nil {
+		common.ErrorResponse(c, err.Error())
+		return
+	}
+
+	user, err := FindByID(uid)
+	if err != nil {
+		common.ErrorResponse(c, err.Error())
+		return
+	}
+
+	common.OkResponse(c, "user", user)
 }
 
 func listUser(c *gin.Context) {
@@ -39,13 +56,13 @@ func listUser(c *gin.Context) {
 
 func showUserByID(c *gin.Context) {
 	id := c.Param("id")
-	idInt, err := strconv.Atoi(id)
+	uid, err := strconv.ParseUint(id, 10, 64)
 	if err != nil {
 		common.ErrorResponse(c, "id must be integer")
 		return
 	}
 
-	user, err := FindByID(uint(idInt))
+	user, err := FindByID(uid)
 	if err != nil {
 		common.ErrorResponse(c, err.Error())
 		return

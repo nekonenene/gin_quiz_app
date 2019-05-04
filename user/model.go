@@ -31,7 +31,7 @@ func FindAll() ([]User, error) {
 	return users, err
 }
 
-func FindByID(id uint) (User, error) {
+func FindByID(id uint64) (User, error) {
 	db := common.GetDB()
 	var user User
 	err := db.First(&user, id).Error
