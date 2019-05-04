@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 import NavbarMenu from './NavbarMenu';
 import User from './model/User';
 
@@ -21,7 +22,7 @@ export default class Navbar extends React.Component<Props, {}> {
     return (
       <nav className="red accent-3" role="navigation">
         <div className="nav-wrapper container">
-          <a href="/" className="brand-logo">Quiz App</a>
+          <Link to="/" className="brand-logo">Quiz App</Link>
           <ul className="right hide-on-small-and-down">
             <NavbarMenu
               isSignin={isSignin}

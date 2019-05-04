@@ -11,8 +11,8 @@ export default class NavbarMenu extends React.Component<Props, {}> {
     if(this.props.isSignin) {
       elements =
         <div>
-          <li><a href="/signout">ログアウト</a></li>
           <li><Link to="/settings">設定</Link></li>
+          <li><a href="/signout">ログアウト</a></li>
         </div>
     } else {
       elements =

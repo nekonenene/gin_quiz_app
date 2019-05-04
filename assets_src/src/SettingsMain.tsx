@@ -6,10 +6,33 @@ export interface Props {
   user: User;
 }
 
-export default class SettingsMain extends React.Component<Props, {}> {
+interface SettingsState {
+  username: string;
+}
+
+export default class SettingsMain extends React.Component<Props, SettingsState> {
+  constructor(props: any) {
+    super(props);
+    this.state = {
+      username: this.props.user.name,
+    };
+
+    this.onChangeUsername = this.onChangeUsername.bind(this);
+    this.updateUsername = this.updateUsername.bind(this);
+  }
+
   private updateUsername(): void {
-    fetch('/api/user/current', {
+    fetch('/api/user/update', {
+      method: "POST",
       credentials: 'same-origin',
+      headers: {
+        "Content-Type": "application/json; charset=utf-8",
+      },
+      body: JSON.stringify({
+        id: this.props.user.id,
+        name: this.state.username,
+        email: this.props.user.email,
+      }),
     }).then(res => res.json())
       .then((resJson) => {
         const userJson = resJson.user;
@@ -20,6 +43,12 @@ export default class SettingsMain extends React.Component<Props, {}> {
       });
   }
 
+  private onChangeUsername(event: any): void {
+    this.setState({
+      username: event.target.value
+    });
+  }
+
   public render() {
     if (this.props.user.id > 0) {
       return (
@@ -28,7 +57,7 @@ export default class SettingsMain extends React.Component<Props, {}> {
             <h4 className="header center">ユーザー設定</h4>
             <div className="row center">
               <div className="input-field col s12">
-                <input type="text" id="username" className="validate" defaultValue={this.props.user.name} />
+                <input type="text" id="username" className="validate" defaultValue={this.props.user.name} onChange={this.onChangeUsername} />
                 <label htmlFor="username">ユーザー名</label>
               </div>
             </div>

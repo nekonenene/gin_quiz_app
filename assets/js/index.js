@@ -41504,7 +41504,8 @@ var HomeMain = /** @class */ (function (_super) {
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _NavbarMenu__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./NavbarMenu */ "./src/NavbarMenu.tsx");
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var _NavbarMenu__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./NavbarMenu */ "./src/NavbarMenu.tsx");
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -41520,6 +41521,7 @@ var __extends = (undefined && undefined.__extends) || (function () {
 })();
 
 
+
 var Navbar = /** @class */ (function (_super) {
     __extends(Navbar, _super);
     function Navbar(props) {
@@ -41533,15 +41535,15 @@ var Navbar = /** @class */ (function (_super) {
         var isSignin = this.props.user.id > 0;
         return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("nav", { className: "red accent-3", role: "navigation" },
             react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "nav-wrapper container" },
-                react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("a", { href: "/", className: "brand-logo" }, "Quiz App"),
+                react__WEBPACK_IMPORTED_MODULE_0__["createElement"](react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], { to: "/", className: "brand-logo" }, "Quiz App"),
                 react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("ul", { className: "right hide-on-small-and-down" },
-                    react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_NavbarMenu__WEBPACK_IMPORTED_MODULE_1__["default"], { isSignin: isSignin })),
+                    react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_NavbarMenu__WEBPACK_IMPORTED_MODULE_2__["default"], { isSignin: isSignin })),
                 react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("ul", { className: "right hide-on-med-and-up" },
                     react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("li", null,
                         react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("a", { className: "dropdown-trigger show-on-small", href: "#!", "data-target": "menuDropdown" },
                             react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("i", { className: "material-icons" }, "menu")))),
                 react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("ul", { className: "dropdown-content", id: "menuDropdown" },
-                    react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_NavbarMenu__WEBPACK_IMPORTED_MODULE_1__["default"], { isSignin: isSignin })))));
+                    react__WEBPACK_IMPORTED_MODULE_0__["createElement"](_NavbarMenu__WEBPACK_IMPORTED_MODULE_2__["default"], { isSignin: isSignin })))));
     };
     return Navbar;
 }(react__WEBPACK_IMPORTED_MODULE_0__["Component"]));
@@ -41588,9 +41590,9 @@ var NavbarMenu = /** @class */ (function (_super) {
             elements =
                 react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", null,
                     react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("li", null,
-                        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("a", { href: "/signout" }, "\u30ED\u30B0\u30A2\u30A6\u30C8")),
+                        react__WEBPACK_IMPORTED_MODULE_0__["createElement"](react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], { to: "/settings" }, "\u8A2D\u5B9A")),
                     react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("li", null,
-                        react__WEBPACK_IMPORTED_MODULE_0__["createElement"](react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], { to: "/settings" }, "\u8A2D\u5B9A")));
+                        react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("a", { href: "/signout" }, "\u30ED\u30B0\u30A2\u30A6\u30C8")));
         }
         else {
             elements =
@@ -41727,12 +41729,27 @@ var __extends = (undefined && undefined.__extends) || (function () {
 
 var SettingsMain = /** @class */ (function (_super) {
     __extends(SettingsMain, _super);
-    function SettingsMain() {
-        return _super !== null && _super.apply(this, arguments) || this;
+    function SettingsMain(props) {
+        var _this = _super.call(this, props) || this;
+        _this.state = {
+            username: _this.props.user.name,
+        };
+        _this.onChangeUsername = _this.onChangeUsername.bind(_this);
+        _this.updateUsername = _this.updateUsername.bind(_this);
+        return _this;
     }
     SettingsMain.prototype.updateUsername = function () {
-        fetch('/api/user/current', {
+        fetch('/api/user/update', {
+            method: "POST",
             credentials: 'same-origin',
+            headers: {
+                "Content-Type": "application/json; charset=utf-8",
+            },
+            body: JSON.stringify({
+                id: this.props.user.id,
+                name: this.state.username,
+                email: this.props.user.email,
+            }),
         }).then(function (res) { return res.json(); })
             .then(function (resJson) {
             var userJson = resJson.user;
@@ -41742,6 +41759,11 @@ var SettingsMain = /** @class */ (function (_super) {
             console.error('Error:', error);
         });
     };
+    SettingsMain.prototype.onChangeUsername = function (event) {
+        this.setState({
+            username: event.target.value
+        });
+    };
     SettingsMain.prototype.render = function () {
         if (this.props.user.id > 0) {
             return (react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "section no-pad-bot", id: "index-banner" },
@@ -41749,7 +41771,7 @@ var SettingsMain = /** @class */ (function (_super) {
                     react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("h4", { className: "header center" }, "\u30E6\u30FC\u30B6\u30FC\u8A2D\u5B9A"),
                     react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "row center" },
                         react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "input-field col s12" },
-                            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("input", { type: "text", id: "username", className: "validate", defaultValue: this.props.user.name }),
+                            react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("input", { type: "text", id: "username", className: "validate", defaultValue: this.props.user.name, onChange: this.onChangeUsername }),
                             react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("label", { htmlFor: "username" }, "\u30E6\u30FC\u30B6\u30FC\u540D"))),
                     react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("div", { className: "row center" },
                         react__WEBPACK_IMPORTED_MODULE_0__["createElement"]("button", { className: "btn-large waves-effect waves-light blue", onClick: this.updateUsername }, "\u66F4\u65B0")),

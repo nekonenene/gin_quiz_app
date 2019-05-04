@@ -8,8 +8,8 @@ import (
 
 type User struct {
 	ID         uint64    `gorm:"primary_key"                        json:"id"`
-	Provider   string    `gorm:"not null; unique_index:openid_idx"  json:"-"           binding:"required,max=255"`
-	ProviderID string    `gorm:"not null; unique_index:openid_idx"  json:"-"           binding:"required,max=255"`
+	Provider   string    `gorm:"not null; unique_index:openid_idx"  json:"-"`
+	ProviderID string    `gorm:"not null; unique_index:openid_idx"  json:"-"`
 	Name       string    `gorm:"not null"                           json:"name"        binding:"required,max=255"`
 	Email      string    `gorm:"not null"                           json:"email"       binding:"required,max=255"`
 	IsAdmin    bool      `                                          json:"is_admin"`
@@ -53,6 +53,13 @@ func FindBy(column string, value interface{}) ([]User, error) {
 	err := db.Where(column+" = ?", value).Find(&users).Error
 
 	return users, err
+}
+
+func (user *User) UpdateOneColumn(column string, value interface{}) (User, error) {
+	db := common.GetDB()
+	err := db.Model(&user).Update(column, value).Error
+
+	return *user, err
 }
 
 func (user *User) Create() (User, error) {
