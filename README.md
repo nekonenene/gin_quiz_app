@@ -19,6 +19,12 @@ docker-compose up
 
 Then, Go => http://localhost:8013
 
+### Build JavaScript
+
+```sh
+make js_watch
+```
+
 
 ## Using...
 
@@ -26,9 +32,11 @@ Then, Go => http://localhost:8013
 * [GORM](https://github.com/jinzhu/gorm)
 * [Air](https://github.com/cosmtrek/air)
 * [sqldef](https://github.com/k0kubun/sqldef)
+* [React](https://reactjs.org)
 * [Materialize.css](https://materializecss.com)
 
 
 ## Thanks!
 
-[golang-gin-realworld-example-app](https://github.com/gothinkster/golang-gin-realworld-example-app)
+* [golang-gin-realworld-example-app](https://github.com/gothinkster/golang-gin-realworld-example-app)
+* [gin-boilerplate](https://github.com/voyagegroup/gin-boilerplate)
