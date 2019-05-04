@@ -1,9 +1,9 @@
 version: "3"
 services:
-  api:
+  server:
     build:
       context: .
-    container_name: quiz_app_api
+    container_name: quiz_app_server
     ports:
       - "8013:8013"
     volumes:
