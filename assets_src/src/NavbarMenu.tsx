@@ -5,14 +5,10 @@ export interface Props {
 }
 
 export default class NavbarMenu extends React.Component<Props, {}> {
-  constructor(props: any) {
-    super(props)
-  }
-
   public render() {
-    const signinElement = this.props.isSignin ?
-      <li><a href="/signout">ログアウト</a></li> :
-      <li><a href="/oauth/google/signin">ログイン</a></li>
+    const signinElement = this.props.isSignin
+      ? <li><a href="/signout">ログアウト</a></li>
+      : <li><a href="/oauth/google/signin">ログイン</a></li>;
     return (
       signinElement
     );

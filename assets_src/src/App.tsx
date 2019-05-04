@@ -6,49 +6,46 @@ import Footer from './Footer';
 import { getCookieByName } from './util';
 import User, { defaultUser } from './model/User';
 
-export interface Props {
-}
-
-type AppState = {
+interface AppState {
   loading: boolean;
   user: User;
-};
+}
 
-class App extends React.Component<Props, AppState> {
-  constructor(props: any) {
+export default class App extends React.Component<{}, AppState> {
+  private constructor(props: any) {
     super(props);
     this.state = {
       loading: true,
-      user: defaultUser
+      user: defaultUser,
     };
   }
 
-  private fetchCurrentUser() {
+  private fetchCurrentUser(): void {
     fetch('/api/user/current', {
-      credentials: 'same-origin'
+      credentials: 'same-origin',
     }).then(res => res.json())
-      .then(resJson => {
+      .then((resJson) => {
         const userJson = resJson.user;
         const user: User = {
           id: userJson.id,
           name: userJson.name,
           email: userJson.email,
-        }
-        console.log('Success:', JSON.stringify(userJson))
+        };
+        console.log('Success:', JSON.stringify(userJson));
         this.setState({
           loading: false,
-          user: user
-        })
+          user,
+        });
       })
-      .catch(error => {
+      .catch((error) => {
         console.error('Error:', error);
         this.setState({
           loading: false,
-        })
+        });
       });
   }
 
-  componentDidMount() {
+  public componentDidMount(): void {
     this.fetchCurrentUser();
     console.log(getCookieByName('session_id'));
   }
@@ -69,7 +66,7 @@ class App extends React.Component<Props, AppState> {
       </div>
     );
   }
-};
+}
 
 ReactDOM.render(
   <App />,

@@ -8,7 +8,8 @@
     "build:prod": "webpack --config webpack.config.prod.js",
     "watch": "webpack --colors --config webpack.config.dev.js --watch",
     "watch:prod": "webpack --colors --config webpack.config.prod.js --watch",
-    "lint": "eslint -c .eslintrc.yml --ext .tsx --ext .ts ./"
+    "lint": "eslint -c .eslintrc.yml --ext .tsx --ext .ts ./",
+    "lint:fix": "eslint --fix -c .eslintrc.yml --ext .tsx --ext .ts ./"
   },
   "author": "nekonenene",
   "license": "MIT",

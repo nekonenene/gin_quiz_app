@@ -1,7 +1,7 @@
 export function getCookieByName(name: string): string {
-  var cookie = document.cookie;
+  const { cookie } = document;
   // console.log(cookie);
-  var reg = new RegExp(`${name}=([^;]*)`);
-  var val = cookie.replace(reg, '$1');
+  const reg = new RegExp(`${name}=([^;]*)`);
+  const val = cookie.replace(reg, '$1');
   return val;
 }

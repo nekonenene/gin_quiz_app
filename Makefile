@@ -51,3 +51,7 @@ js_watch:
 .PHONY: js_lint
 js_lint:
 	cd assets_src && npm run lint
+
+.PHONY: js_lint_fix
+js_lint_fix:
+	cd assets_src && npm run lint:fix
