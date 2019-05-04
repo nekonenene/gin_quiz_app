@@ -5,7 +5,7 @@ export interface Props {
   user: User;
 }
 
-export default class Main extends React.Component<Props, {}> {
+export default class HomeMain extends React.Component<Props, {}> {
   private constructor(props: any) {
     super(props);
     console.log(this.props.user);

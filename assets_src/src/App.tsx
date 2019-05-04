@@ -1,74 +1,22 @@
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
-import Navbar from './Navbar';
-import Main from './Main';
-import Footer from './Footer';
-import { getCookieByName } from './util';
-import User, { defaultUser } from './model/User';
+import { HashRouter as Router, Switch, Route } from 'react-router-dom';
+import Home from './Home';
+import Settings from './Settings';
 
-interface AppState {
-  loading: boolean;
-  user: User;
-}
-
-export default class App extends React.Component<{}, AppState> {
-  private constructor(props: any) {
-    super(props);
-    this.state = {
-      loading: true,
-      user: defaultUser,
-    };
-  }
-
-  private fetchCurrentUser(): void {
-    fetch('/api/user/current', {
-      credentials: 'same-origin',
-    }).then(res => res.json())
-      .then((resJson) => {
-        const userJson = resJson.user;
-        const user: User = {
-          id: userJson.id,
-          name: userJson.name,
-          email: userJson.email,
-        };
-        console.log('Success:', JSON.stringify(userJson));
-        this.setState({
-          loading: false,
-          user,
-        });
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-        this.setState({
-          loading: false,
-        });
-      });
-  }
-
-  public componentDidMount(): void {
-    this.fetchCurrentUser();
-    console.log(getCookieByName('session_id'));
-  }
-
-  public render() {
-    return (
-      <div>
-        <Navbar
-          user={ this.state.user }
-        />
-        <Main
-          user={ this.state.user }
-        />
-        <Footer
-          author="ハトネコエ"
-          link="https://twitter.com/nekonenene"
-        />
-      </div>
-    );
-  }
+function NoMatch() {
+  return (
+    <div></div>
+  )
 }
 
 ReactDOM.render(
-  <App />,
+  <Router>
+    <Switch>
+      <Route exact path="/" component={Home} />
+      <Route exact path="/settings" component={Settings} />
+      <Route component={NoMatch} />
+    </Switch>
+  </Router>,
   document.getElementById('app'),
 );
