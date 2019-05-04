@@ -50,3 +50,12 @@ Icon
 Network Trash Folder
 Temporary Items
 .apdisk
+
+
+### https://raw.github.com/github/gitignore/8f83007b2988788cc5e6e16be30c18ef701beac5/Global/VisualStudioCode.gitignore
+
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
