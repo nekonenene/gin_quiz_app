@@ -38,5 +38,6 @@ make js_watch
 
 ## Thanks!
 
-* [golang-gin-realworld-example-app](https://github.com/gothinkster/golang-gin-realworld-example-app)
-* [gin-boilerplate](https://github.com/voyagegroup/gin-boilerplate)
+* [gothinkster/golang-gin-realworld-example-app](https://github.com/gothinkster/golang-gin-realworld-example-app)
+* [voyagegroup/gin-boilerplate](https://github.com/voyagegroup/gin-boilerplate)
+* [How to do Google sign-in with Go](https://skarlso.github.io/2016/06/12/google-signin-with-go)
