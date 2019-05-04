@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { Link } from 'react-router-dom';
+import M from 'materialize-css';
 import User from './model/User';
 
 export interface Props {
@@ -37,9 +38,11 @@ export default class SettingsMain extends React.Component<Props, SettingsState> 
       .then((resJson) => {
         const userJson = resJson.user;
         console.log('Success:', JSON.stringify(userJson));
+        M.toast({ html: 'ユーザーの更新に成功しました', classes: 'green darken-1' });
       })
       .catch((error) => {
         console.error('Error:', error);
+        M.toast({ html: 'ユーザーの更新に失敗しました', classes: 'red darken-1' });
       });
   }
 

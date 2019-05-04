@@ -41712,6 +41712,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var materialize_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! materialize-css */ "./node_modules/materialize-css/dist/js/materialize.js");
+/* harmony import */ var materialize_css__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(materialize_css__WEBPACK_IMPORTED_MODULE_2__);
 var __extends = (undefined && undefined.__extends) || (function () {
     var extendStatics = function (d, b) {
         extendStatics = Object.setPrototypeOf ||
@@ -41725,6 +41727,7 @@ var __extends = (undefined && undefined.__extends) || (function () {
         d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
     };
 })();
+
 
 
 var SettingsMain = /** @class */ (function (_super) {
@@ -41754,9 +41757,11 @@ var SettingsMain = /** @class */ (function (_super) {
             .then(function (resJson) {
             var userJson = resJson.user;
             console.log('Success:', JSON.stringify(userJson));
+            materialize_css__WEBPACK_IMPORTED_MODULE_2___default.a.toast({ html: 'ユーザーの更新に成功しました', classes: 'green darken-1' });
         })
             .catch(function (error) {
             console.error('Error:', error);
+            materialize_css__WEBPACK_IMPORTED_MODULE_2___default.a.toast({ html: 'ユーザーの更新に失敗しました', classes: 'red darken-1' });
         });
     };
     SettingsMain.prototype.onChangeUsername = function (event) {
