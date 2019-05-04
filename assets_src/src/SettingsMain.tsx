@@ -1,4 +1,5 @@
 import * as React from 'react';
+import { Link } from 'react-router-dom';
 import User from './model/User';
 
 export interface Props {
@@ -28,11 +29,14 @@ export default class SettingsMain extends React.Component<Props, {}> {
             <div className="row center">
               <div className="input-field col s12">
                 <input type="text" id="username" className="validate" defaultValue={this.props.user.name} />
-                <label className="active" htmlFor="username">ユーザー名</label>
+                <label htmlFor="username">ユーザー名</label>
               </div>
             </div>
             <div className="row center">
               <button className="btn-large waves-effect waves-light blue" onClick={this.updateUsername}>更新</button>
+            </div>
+            <div className="row center">
+              <Link to="/" className="btn waves-effect waves-light red">トップへ</Link>
             </div>
           </div>
         </div>

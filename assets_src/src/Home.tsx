@@ -1,4 +1,5 @@
 import * as React from 'react';
+import M from 'materialize-css';
 import Navbar from './Navbar';
 import Main from './HomeMain';
 import Footer from './Footer';
@@ -11,12 +12,18 @@ interface AppState {
 }
 
 export default class App extends React.Component<{}, AppState> {
-  private constructor(props: any) {
+  public constructor(props: any) {
     super(props);
     this.state = {
       loading: true,
       user: defaultUser,
     };
+  }
+
+  public componentDidMount(): void {
+    M.AutoInit();
+    this.fetchCurrentUser();
+    console.log(getCookieByName('session_id'));
   }
 
   private fetchCurrentUser(): void {
@@ -42,11 +49,6 @@ export default class App extends React.Component<{}, AppState> {
           loading: false,
         });
       });
-  }
-
-  public componentDidMount(): void {
-    this.fetchCurrentUser();
-    console.log(getCookieByName('session_id'));
   }
 
   public render() {

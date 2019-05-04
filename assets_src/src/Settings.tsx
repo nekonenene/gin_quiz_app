@@ -1,9 +1,8 @@
 import * as React from 'react';
-import { Link } from 'react-router-dom';
+import M from 'materialize-css';
 import Navbar from './Navbar';
 import Main from './SettingsMain';
 import Footer from './Footer';
-import { getCookieByName } from './util';
 import User, { defaultUser } from './model/User';
 
 interface SettingsState {
@@ -12,12 +11,21 @@ interface SettingsState {
 }
 
 export default class Settings extends React.Component<{}, SettingsState> {
-  private constructor(props: any) {
+  public constructor(props: any) {
     super(props);
     this.state = {
       loading: true,
       user: defaultUser,
     };
+  }
+
+  public componentDidMount(): void {
+    M.AutoInit();
+    this.fetchCurrentUser();
+  }
+
+  public componentDidUpdate(): void {
+    M.updateTextFields();
   }
 
   private fetchCurrentUser(): void {
@@ -45,11 +53,6 @@ export default class Settings extends React.Component<{}, SettingsState> {
       });
   }
 
-  public componentDidMount(): void {
-    this.fetchCurrentUser();
-    console.log(getCookieByName('session_id'));
-  }
-
   public render() {
     return (
       <div>
@@ -59,9 +62,6 @@ export default class Settings extends React.Component<{}, SettingsState> {
         <Main
           user={this.state.user}
         />
-        <div className="center">
-          <Link to="/" className="btn waves-effect waves-light red">トップへ</Link>
-        </div>
         <Footer
           author="ハトネコエ"
           link="https://twitter.com/nekonenene"
