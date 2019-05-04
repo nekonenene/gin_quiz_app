@@ -1,6 +1,6 @@
 module.exports = {
   mode: 'development',
-  devtool: 'inline-source-map',
+  devtool: 'source-map',
   entry: './src/App.tsx',
   output: {
     filename: '../../assets/js/index.js',
