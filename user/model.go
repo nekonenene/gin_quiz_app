@@ -8,8 +8,8 @@ import (
 
 type User struct {
 	ID         uint64    `gorm:"primary_key"                        json:"id"`
-	Provider   string    `gorm:"not null; unique_index:openid_idx"  json:"provider"    binding:"required,max=255"`
-	ProviderID string    `gorm:"not null; unique_index:openid_idx"  json:"provider_id" binding:"required,max=255"`
+	Provider   string    `gorm:"not null; unique_index:openid_idx"  json:"-"           binding:"required,max=255"`
+	ProviderID string    `gorm:"not null; unique_index:openid_idx"  json:"-"           binding:"required,max=255"`
 	Name       string    `gorm:"not null"                           json:"name"        binding:"required,max=255"`
 	Email      string    `gorm:"not null"                           json:"email"       binding:"required,max=255"`
 	IsAdmin    bool      `                                          json:"is_admin"`
