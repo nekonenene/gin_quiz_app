@@ -7,6 +7,15 @@ export interface Props {
 }
 
 export default class Navbar extends React.Component<Props, {}> {
+  constructor(props: any) {
+    super(props);
+  }
+
+  componentDidUpdate(prevProps: Props) {
+    console.log('prev', prevProps.user);
+    console.log('current', this.props.user);
+  }
+
   public render() {
     const isSignin = this.props.user.id > 0;
     return (
