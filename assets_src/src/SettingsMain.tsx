@@ -31,13 +31,17 @@ export default class SettingsMain extends React.Component<Props, SettingsState> 
       },
       body: JSON.stringify({
         id: this.props.user.id,
-        name: this.state.username,
+        name: this.state.username || this.props.user.name,
         email: this.props.user.email,
       }),
     }).then(res => res.json())
       .then((resJson) => {
-        const userJson = resJson.user;
-        console.log('Success:', JSON.stringify(userJson));
+        if (resJson.error != null) {
+          M.toast({ html: `ユーザーの更新に失敗しました (${resJson.error})`, classes: 'red darken-1' });
+          return;
+        }
+
+        console.log('Success:', JSON.stringify(resJson));
         M.toast({ html: 'ユーザーの更新に成功しました', classes: 'green darken-1' });
       })
       .catch((error) => {

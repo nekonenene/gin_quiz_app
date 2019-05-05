@@ -31,6 +31,11 @@ export default class App extends React.Component<{}, AppState> {
       credentials: 'same-origin',
     }).then(res => res.json())
       .then((resJson) => {
+        if (resJson.error != null) {
+          M.toast({ html: `ユーザー情報の取得に失敗しました (${resJson.error})`, classes: 'red darken-1' });
+          return;
+        }
+
         const userJson = resJson.user;
         const user: User = {
           id: userJson.id,

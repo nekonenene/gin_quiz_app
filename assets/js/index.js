@@ -41404,6 +41404,10 @@ var App = /** @class */ (function (_super) {
             credentials: 'same-origin',
         }).then(function (res) { return res.json(); })
             .then(function (resJson) {
+            if (resJson.error != null) {
+                materialize_css__WEBPACK_IMPORTED_MODULE_1___default.a.toast({ html: "\u30E6\u30FC\u30B6\u30FC\u60C5\u5831\u306E\u53D6\u5F97\u306B\u5931\u6557\u3057\u307E\u3057\u305F (" + resJson.error + ")", classes: 'red darken-1' });
+                return;
+            }
             var userJson = resJson.user;
             var user = {
                 id: userJson.id,
@@ -41668,6 +41672,10 @@ var Settings = /** @class */ (function (_super) {
             credentials: 'same-origin',
         }).then(function (res) { return res.json(); })
             .then(function (resJson) {
+            if (resJson.error != null) {
+                materialize_css__WEBPACK_IMPORTED_MODULE_1___default.a.toast({ html: "\u30E6\u30FC\u30B6\u30FC\u60C5\u5831\u306E\u53D6\u5F97\u306B\u5931\u6557\u3057\u307E\u3057\u305F (" + resJson.error + ")", classes: 'red darken-1' });
+                return;
+            }
             var userJson = resJson.user;
             var user = {
                 id: userJson.id,
@@ -41750,13 +41758,16 @@ var SettingsMain = /** @class */ (function (_super) {
             },
             body: JSON.stringify({
                 id: this.props.user.id,
-                name: this.state.username,
+                name: this.state.username || this.props.user.name,
                 email: this.props.user.email,
             }),
         }).then(function (res) { return res.json(); })
             .then(function (resJson) {
-            var userJson = resJson.user;
-            console.log('Success:', JSON.stringify(userJson));
+            if (resJson.error != null) {
+                materialize_css__WEBPACK_IMPORTED_MODULE_2___default.a.toast({ html: "\u30E6\u30FC\u30B6\u30FC\u306E\u66F4\u65B0\u306B\u5931\u6557\u3057\u307E\u3057\u305F (" + resJson.error + ")", classes: 'red darken-1' });
+                return;
+            }
+            console.log('Success:', JSON.stringify(resJson));
             materialize_css__WEBPACK_IMPORTED_MODULE_2___default.a.toast({ html: 'ユーザーの更新に成功しました', classes: 'green darken-1' });
         })
             .catch(function (error) {
