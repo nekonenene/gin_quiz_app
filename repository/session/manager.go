@@ -2,7 +2,6 @@ package session
 
 import (
 	"errors"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/nekonenene/gin_quiz_app/common"
@@ -56,7 +55,7 @@ func CurrentSessionData(c *gin.Context) (string, error) {
 	}
 
 	// セッションの改竄をしていなければここは通らないはず
-	if isSessionExpired(session) {
+	if session.IsExpired(sessionMaxAge) {
 		DestroySession(c)
 		return "", errors.New("session has expired")
 	}
@@ -83,12 +82,6 @@ func CurrentUserID(c *gin.Context) (uint64, error) {
 func IsSignin(c *gin.Context) bool {
 	userID, err := CurrentUserID(c)
 	return err == nil && userID > 0
-}
-
-// Session モデルの CreatedAt を見て、期限切れのセッションか判定
-func isSessionExpired(session Session) bool {
-	expiredAt := session.CreatedAt.Add(time.Second * sessionMaxAge)
-	return time.Now().After(expiredAt)
 }
 
 // session ID を cookie および DB から削除

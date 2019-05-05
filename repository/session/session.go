@@ -1,6 +1,8 @@
 package session
 
 import (
+	"time"
+
 	"github.com/nekonenene/gin_quiz_app/model"
 	"github.com/nekonenene/gin_quiz_app/registry"
 )
@@ -29,4 +31,10 @@ func DeleteBySessionID(sessionID string) error {
 
 func (sess *Session) Decode() (Data, error) {
 	return Decode(sess.EncodedData)
+}
+
+// 期限切れのセッションか判定
+func (sess *Session) IsExpired(maxAgeSec int) bool {
+	expiredAt := sess.CreatedAt.Add(time.Second * time.Duration(maxAgeSec))
+	return time.Now().After(expiredAt)
 }
