@@ -1,7 +1,7 @@
 package main
 
 import (
-	"strconv"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/nekonenene/gin_quiz_app/common"
@@ -9,10 +9,6 @@ import (
 	"github.com/nekonenene/gin_quiz_app/root"
 	"github.com/nekonenene/gin_quiz_app/session"
 	"github.com/nekonenene/gin_quiz_app/user"
-)
-
-const (
-	portNum = 8013
 )
 
 func main() {
@@ -43,5 +39,6 @@ func setupRouter() {
 	api := router.Group("/api")
 	user.UserRouter(api.Group("/user"))
 
-	router.Run(":" + strconv.Itoa(portNum))
+	port := os.Getenv("SERVER_PORT_NUM")
+	router.Run(":" + port)
 }
