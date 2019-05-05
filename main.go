@@ -7,6 +7,7 @@ import (
 	"github.com/nekonenene/gin_quiz_app/common"
 	gauth "github.com/nekonenene/gin_quiz_app/oauth/google"
 	"github.com/nekonenene/gin_quiz_app/root"
+	"github.com/nekonenene/gin_quiz_app/quiz"
 	"github.com/nekonenene/gin_quiz_app/session"
 	"github.com/nekonenene/gin_quiz_app/user"
 )
@@ -22,6 +23,7 @@ func main() {
 func migrateAll() {
 	user.AutoMigrate()
 	session.AutoMigrate()
+	quiz.AutoMigrate()
 }
 
 func setupRouter() {
