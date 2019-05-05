@@ -4,8 +4,8 @@ import (
 	"os"
 
 	"github.com/gin-gonic/gin"
-	gauth "github.com/nekonenene/gin_quiz_app/oauth/google"
 	"github.com/nekonenene/gin_quiz_app/repository/session"
+	"github.com/nekonenene/gin_quiz_app/router/oauth/google"
 	"github.com/nekonenene/gin_quiz_app/router/user"
 )
 
@@ -26,7 +26,7 @@ func rootRouter(router *gin.RouterGroup) {
 	router.GET("/", root)
 	router.GET("/signout", signout)
 
-	gauth.GoogleOAuthRouter(router.Group("/oauth/google"))
+	google.GoogleOAuthRouter(router.Group("/oauth/google"))
 
 	api := router.Group("/api")
 	user.UserRouter(api.Group("/user"))
