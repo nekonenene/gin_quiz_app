@@ -3,8 +3,12 @@ package user
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/nekonenene/gin_quiz_app/common"
-	"github.com/nekonenene/gin_quiz_app/session"
+	"github.com/nekonenene/gin_quiz_app/model"
+	"github.com/nekonenene/gin_quiz_app/repository/session"
+	"github.com/nekonenene/gin_quiz_app/repository/user"
 )
+
+type User model.User
 
 func UserRouter(router *gin.RouterGroup) {
 	router.GET("/current", currentUser)
@@ -19,7 +23,7 @@ func currentUser(c *gin.Context) {
 		return
 	}
 
-	user, err := FindByID(uid)
+	user, err := user.FindByID(uid)
 	if err != nil {
 		common.ErrorResponse(c, err.Error())
 		return
@@ -46,7 +50,7 @@ func updateUser(c *gin.Context) {
 		return
 	}
 
-	user, err := FindByID(uid)
+	user, err := user.FindByID(uid)
 	if err != nil {
 		common.ErrorResponse(c, err.Error())
 		return
@@ -75,7 +79,7 @@ func listUser(c *gin.Context) {
 		return
 	}
 
-	users, err := FindAll()
+	users, err := user.FindAll()
 	if err != nil {
 		common.ErrorResponse(c, err.Error())
 		return

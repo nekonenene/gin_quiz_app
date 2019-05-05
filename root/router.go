@@ -2,7 +2,7 @@ package root
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/nekonenene/gin_quiz_app/session"
+	"github.com/nekonenene/gin_quiz_app/repository/session"
 )
 
 func RootRouter(router *gin.RouterGroup) {

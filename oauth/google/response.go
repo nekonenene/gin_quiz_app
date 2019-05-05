@@ -1,7 +1,7 @@
 package google
 
 import (
-	"github.com/nekonenene/gin_quiz_app/user"
+	"github.com/nekonenene/gin_quiz_app/repository/user"
 )
 
 const (

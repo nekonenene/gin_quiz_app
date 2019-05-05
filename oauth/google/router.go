@@ -8,8 +8,8 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 	"github.com/nekonenene/gin_quiz_app/common"
-	"github.com/nekonenene/gin_quiz_app/session"
-	"github.com/nekonenene/gin_quiz_app/user"
+	"github.com/nekonenene/gin_quiz_app/repository/session"
+	"github.com/nekonenene/gin_quiz_app/repository/user"
 )
 
 const (
