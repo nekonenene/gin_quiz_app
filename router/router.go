@@ -26,7 +26,6 @@ func rootRouter(router *gin.RouterGroup) {
 	router.GET("/", root)
 	router.GET("/signout", signout)
 
-	gauth.InitConf()
 	gauth.GoogleOAuthRouter(router.Group("/oauth/google"))
 
 	api := router.Group("/api")

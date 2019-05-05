@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/jinzhu/gorm"
 	"github.com/nekonenene/gin_quiz_app/common"
+	"github.com/nekonenene/gin_quiz_app/registry"
 	"github.com/nekonenene/gin_quiz_app/repository/session"
 	"github.com/nekonenene/gin_quiz_app/repository/user"
 )
@@ -27,7 +28,7 @@ func signin(c *gin.Context) {
 	state := common.RandomString(stateLength)
 	common.SetCookie(c, stateCookieName, state, stateMaxAge)
 
-	c.Redirect(302, conf.AuthCodeURL(state))
+	c.Redirect(302, registry.GoogleOAuthConfig.AuthCodeURL(state))
 }
 
 func callbackHandler(c *gin.Context) {
@@ -39,6 +40,7 @@ func callbackHandler(c *gin.Context) {
 		return
 	}
 
+	conf := registry.GoogleOAuthConfig
 	context := context.Background()
 	token, err := conf.Exchange(context, c.Query("code"))
 	if err != nil {

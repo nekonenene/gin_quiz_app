@@ -1,14 +1,14 @@
 package session
 
 import (
-	"github.com/nekonenene/gin_quiz_app/common"
 	"github.com/nekonenene/gin_quiz_app/model"
+	"github.com/nekonenene/gin_quiz_app/registry"
 )
 
 type Session model.Session
 
 func FindBySessionID(sessionID string) (Session, error) {
-	db := common.GetDB()
+	db := registry.DB
 	var session Session
 	err := db.Where("session_id = ?", sessionID).First(&session).Error
 
@@ -16,14 +16,14 @@ func FindBySessionID(sessionID string) (Session, error) {
 }
 
 func Create(session *Session) (Session, error) {
-	db := common.GetDB()
+	db := registry.DB
 	err := db.Create(session).Error
 
 	return *session, err
 }
 
 func DeleteBySessionID(sessionID string) error {
-	db := common.GetDB()
+	db := registry.DB
 	return db.Where("session_id = ?", sessionID).Delete(Session{}).Error
 }
 

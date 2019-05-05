@@ -1,11 +1,9 @@
 package model
 
-import (
-	"github.com/nekonenene/gin_quiz_app/common"
-)
+import "github.com/nekonenene/gin_quiz_app/registry"
 
 func AutoMigrate() {
-	db := common.GetDB()
+	db := registry.DB
 
 	db.AutoMigrate(&User{})
 	db.AutoMigrate(&Session{})
