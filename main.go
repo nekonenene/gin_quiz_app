@@ -11,5 +11,5 @@ func main() {
 	defer registry.DB.Close()
 
 	model.AutoMigrate()
-	router.InitRouter()
+	router.Init()
 }

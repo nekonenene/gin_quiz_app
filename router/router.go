@@ -9,7 +9,7 @@ import (
 	"github.com/nekonenene/gin_quiz_app/router/user"
 )
 
-func InitRouter() {
+func Init() {
 	router := gin.Default()
 	router.Use(gin.Recovery())
 	router.LoadHTMLGlob("assets/html/*")
