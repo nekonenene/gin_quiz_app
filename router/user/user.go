@@ -3,12 +3,11 @@ package user
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/nekonenene/gin_quiz_app/common"
-	"github.com/nekonenene/gin_quiz_app/model"
 	"github.com/nekonenene/gin_quiz_app/repository/session"
 	"github.com/nekonenene/gin_quiz_app/repository/user"
 )
 
-type User model.User
+type User user.User
 
 func UserRouter(router *gin.RouterGroup) {
 	router.GET("/current", currentUser)
