@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 	"github.com/nekonenene/gin_quiz_app/common"
+	"github.com/nekonenene/gin_quiz_app/repository/cookie"
 )
 
 const (
@@ -98,10 +99,10 @@ func DestroySession(c *gin.Context) error {
 
 // cookie に session ID を保存
 func storeSessionIDInCookie(c *gin.Context, sessionID string) {
-	common.SetCookie(c, cookieName, sessionID, sessionMaxAge)
+	cookie.Set(c, cookieName, sessionID, sessionMaxAge)
 }
 
 // cookie の session ID を削除
 func deleteSessionIDInCookie(c *gin.Context) {
-	common.SetCookie(c, cookieName, "", -1)
+	cookie.Set(c, cookieName, "", -1)
 }

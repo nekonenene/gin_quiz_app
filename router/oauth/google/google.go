@@ -9,6 +9,7 @@ import (
 	"github.com/jinzhu/gorm"
 	"github.com/nekonenene/gin_quiz_app/common"
 	"github.com/nekonenene/gin_quiz_app/registry"
+	"github.com/nekonenene/gin_quiz_app/repository/cookie"
 	"github.com/nekonenene/gin_quiz_app/repository/oauth/google"
 	"github.com/nekonenene/gin_quiz_app/repository/session"
 	"github.com/nekonenene/gin_quiz_app/repository/user"
@@ -28,15 +29,15 @@ func GoogleOAuthRouter(router *gin.RouterGroup) {
 
 func signin(c *gin.Context) {
 	state := common.RandomString(stateLength)
-	common.SetCookie(c, stateCookieName, state, stateMaxAge)
+	cookie.Set(c, stateCookieName, state, stateMaxAge)
 
 	c.Redirect(302, registry.GoogleOAuthConfig.AuthCodeURL(state))
 }
 
 func callbackHandler(c *gin.Context) {
 	// 遷移異常がないか確認
-	state, _ := common.GetCookieValue(c, stateCookieName)
-	common.SetCookie(c, stateCookieName, "", -1) // Delete Cookie
+	state, _ := cookie.GetValue(c, stateCookieName)
+	cookie.Set(c, stateCookieName, "", -1) // Delete Cookie
 	if state != c.Query("state") {
 		common.BadRequestErrorResponse(c, "invalid session state")
 		return
